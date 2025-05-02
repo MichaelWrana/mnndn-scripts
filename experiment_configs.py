@@ -1,9 +1,10 @@
 from utils_watchdog import *
 
 def reformat_dict(server_dict):
+    #len("server_")=7
     reformatted = {}
     for key in server_dict.keys():
-        reformatted[f"s{key[len("server_"):]}"] = server_dict[key]
+        reformatted[f"s{key[7:]}"] = server_dict[key]
     return reformatted
 
 def find_server_by_website(servers, website_name):
