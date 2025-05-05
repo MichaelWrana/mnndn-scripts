@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Folder to monitor
-WATCH_DIR="/home/michaelw/Documents/experiment_data/output/"
+WATCH_DIR="/home/wrana_michael/experiment_data/output/"
 TARGET_COUNT=100
 MIN_SIZE=1048576  # 1MB in bytes
 

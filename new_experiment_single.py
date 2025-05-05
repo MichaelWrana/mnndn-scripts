@@ -26,7 +26,7 @@ def get_next_folder_number(base_dir):
     return max_num + 1
 
 if __name__ == '__main__':
-    experiment_dir = '/home/michaelw/Documents/experiment_data' # experiment data home directory
+    experiment_dir = '/home/wrana_michael/experiment_data' # experiment data home directory
     topo_file = f'{experiment_dir}/topologies/ba-topo.conf' # Mininet topology file directory
 
     website_dir = f'{experiment_dir}/websites' # folder containing website HTML files
