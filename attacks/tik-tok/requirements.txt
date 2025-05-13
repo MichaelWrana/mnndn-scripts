@@ -1,0 +1,11 @@
+scapy==2.4.5
+matplotlib==3.3.4
+h5py
+tqdm
+scikit-learn
+pandas
+dill
+numpy==1.16.4
+tensorflow==1.14.0
+tensorflow-gpu==1.14.0
+keras==2.3.0
