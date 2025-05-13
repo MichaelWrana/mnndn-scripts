@@ -1,0 +1,1052 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key id="d2" for="edge" attr.name="delay" attr.type="double"/>
+<key id="d1" for="node" attr.name="label" attr.type="string"/>
+<key id="d0" for="node" attr.name="type" attr.type="string"/>
+<graph edgedefault="undirected"><node id="0">
+  <data key="d0">unassigned</data>
+  <data key="d1">z0</data>
+</node>
+<node id="1">
+  <data key="d0">relay</data>
+  <data key="d1">r0</data>
+</node>
+<node id="2">
+  <data key="d0">unassigned</data>
+  <data key="d1">z2</data>
+</node>
+<node id="3">
+  <data key="d0">unassigned</data>
+  <data key="d1">z3</data>
+</node>
+<node id="4">
+  <data key="d0">unassigned</data>
+  <data key="d1">z4</data>
+</node>
+<node id="5">
+  <data key="d0">server</data>
+  <data key="d1">s5</data>
+</node>
+<node id="6">
+  <data key="d0">server</data>
+  <data key="d1">s16</data>
+</node>
+<node id="7">
+  <data key="d0">relay</data>
+  <data key="d1">r2</data>
+</node>
+<node id="8">
+  <data key="d0">unassigned</data>
+  <data key="d1">z8</data>
+</node>
+<node id="9">
+  <data key="d0">unassigned</data>
+  <data key="d1">z9</data>
+</node>
+<node id="10">
+  <data key="d0">server</data>
+  <data key="d1">s6</data>
+</node>
+<node id="11">
+  <data key="d0">relay</data>
+  <data key="d1">r1</data>
+</node>
+<node id="12">
+  <data key="d0">unassigned</data>
+  <data key="d1">z12</data>
+</node>
+<node id="13">
+  <data key="d0">unassigned</data>
+  <data key="d1">z13</data>
+</node>
+<node id="14">
+  <data key="d0">unassigned</data>
+  <data key="d1">z14</data>
+</node>
+<node id="15">
+  <data key="d0">server</data>
+  <data key="d1">s20</data>
+</node>
+<node id="16">
+  <data key="d0">unassigned</data>
+  <data key="d1">z16</data>
+</node>
+<node id="17">
+  <data key="d0">unassigned</data>
+  <data key="d1">z17</data>
+</node>
+<node id="18">
+  <data key="d0">unassigned</data>
+  <data key="d1">z18</data>
+</node>
+<node id="19">
+  <data key="d0">unassigned</data>
+  <data key="d1">z19</data>
+</node>
+<node id="20">
+  <data key="d0">server</data>
+  <data key="d1">s22</data>
+</node>
+<node id="21">
+  <data key="d0">user</data>
+  <data key="d1">u7</data>
+</node>
+<node id="22">
+  <data key="d0">unassigned</data>
+  <data key="d1">z22</data>
+</node>
+<node id="23">
+  <data key="d0">unassigned</data>
+  <data key="d1">z23</data>
+</node>
+<node id="24">
+  <data key="d0">unassigned</data>
+  <data key="d1">z24</data>
+</node>
+<node id="25">
+  <data key="d0">unassigned</data>
+  <data key="d1">z25</data>
+</node>
+<node id="26">
+  <data key="d0">unassigned</data>
+  <data key="d1">z26</data>
+</node>
+<node id="27">
+  <data key="d0">unassigned</data>
+  <data key="d1">z27</data>
+</node>
+<node id="28">
+  <data key="d0">unassigned</data>
+  <data key="d1">z28</data>
+</node>
+<node id="29">
+  <data key="d0">server</data>
+  <data key="d1">s24</data>
+</node>
+<node id="30">
+  <data key="d0">unassigned</data>
+  <data key="d1">z30</data>
+</node>
+<node id="31">
+  <data key="d0">unassigned</data>
+  <data key="d1">z31</data>
+</node>
+<node id="32">
+  <data key="d0">unassigned</data>
+  <data key="d1">z32</data>
+</node>
+<node id="33">
+  <data key="d0">server</data>
+  <data key="d1">s1</data>
+</node>
+<node id="34">
+  <data key="d0">unassigned</data>
+  <data key="d1">z34</data>
+</node>
+<node id="35">
+  <data key="d0">unassigned</data>
+  <data key="d1">z35</data>
+</node>
+<node id="36">
+  <data key="d0">unassigned</data>
+  <data key="d1">z36</data>
+</node>
+<node id="37">
+  <data key="d0">unassigned</data>
+  <data key="d1">z37</data>
+</node>
+<node id="38">
+  <data key="d0">server</data>
+  <data key="d1">s25</data>
+</node>
+<node id="39">
+  <data key="d0">unassigned</data>
+  <data key="d1">z39</data>
+</node>
+<node id="40">
+  <data key="d0">server</data>
+  <data key="d1">s26</data>
+</node>
+<node id="41">
+  <data key="d0">unassigned</data>
+  <data key="d1">z41</data>
+</node>
+<node id="42">
+  <data key="d0">relay</data>
+  <data key="d1">r10</data>
+</node>
+<node id="43">
+  <data key="d0">server</data>
+  <data key="d1">s7</data>
+</node>
+<node id="44">
+  <data key="d0">relay</data>
+  <data key="d1">r7</data>
+</node>
+<node id="45">
+  <data key="d0">unassigned</data>
+  <data key="d1">z45</data>
+</node>
+<node id="46">
+  <data key="d0">server</data>
+  <data key="d1">s27</data>
+</node>
+<node id="47">
+  <data key="d0">unassigned</data>
+  <data key="d1">z47</data>
+</node>
+<node id="48">
+  <data key="d0">unassigned</data>
+  <data key="d1">z48</data>
+</node>
+<node id="49">
+  <data key="d0">server</data>
+  <data key="d1">s28</data>
+</node>
+<node id="50">
+  <data key="d0">unassigned</data>
+  <data key="d1">z50</data>
+</node>
+<node id="51">
+  <data key="d0">unassigned</data>
+  <data key="d1">z51</data>
+</node>
+<node id="52">
+  <data key="d0">relay</data>
+  <data key="d1">r5</data>
+</node>
+<node id="53">
+  <data key="d0">user</data>
+  <data key="d1">u0</data>
+</node>
+<node id="54">
+  <data key="d0">server</data>
+  <data key="d1">s29</data>
+</node>
+<node id="55">
+  <data key="d0">unassigned</data>
+  <data key="d1">z55</data>
+</node>
+<node id="56">
+  <data key="d0">unassigned</data>
+  <data key="d1">z56</data>
+</node>
+<node id="57">
+  <data key="d0">unassigned</data>
+  <data key="d1">z57</data>
+</node>
+<node id="58">
+  <data key="d0">server</data>
+  <data key="d1">s30</data>
+</node>
+<node id="59">
+  <data key="d0">server</data>
+  <data key="d1">s8</data>
+</node>
+<node id="60">
+  <data key="d0">relay</data>
+  <data key="d1">r9</data>
+</node>
+<node id="61">
+  <data key="d0">server</data>
+  <data key="d1">s31</data>
+</node>
+<node id="62">
+  <data key="d0">unassigned</data>
+  <data key="d1">z62</data>
+</node>
+<node id="63">
+  <data key="d0">unassigned</data>
+  <data key="d1">z63</data>
+</node>
+<node id="64">
+  <data key="d0">relay</data>
+  <data key="d1">r3</data>
+</node>
+<node id="65">
+  <data key="d0">unassigned</data>
+  <data key="d1">z65</data>
+</node>
+<node id="66">
+  <data key="d0">server</data>
+  <data key="d1">s32</data>
+</node>
+<node id="67">
+  <data key="d0">unassigned</data>
+  <data key="d1">z67</data>
+</node>
+<node id="68">
+  <data key="d0">server</data>
+  <data key="d1">s33</data>
+</node>
+<node id="69">
+  <data key="d0">relay</data>
+  <data key="d1">r8</data>
+</node>
+<node id="70">
+  <data key="d0">unassigned</data>
+  <data key="d1">z70</data>
+</node>
+<node id="71">
+  <data key="d0">unassigned</data>
+  <data key="d1">z71</data>
+</node>
+<node id="72">
+  <data key="d0">unassigned</data>
+  <data key="d1">z72</data>
+</node>
+<node id="73">
+  <data key="d0">server</data>
+  <data key="d1">s34</data>
+</node>
+<node id="74">
+  <data key="d0">server</data>
+  <data key="d1">s35</data>
+</node>
+<node id="75">
+  <data key="d0">unassigned</data>
+  <data key="d1">z75</data>
+</node>
+<node id="76">
+  <data key="d0">unassigned</data>
+  <data key="d1">z76</data>
+</node>
+<node id="77">
+  <data key="d0">unassigned</data>
+  <data key="d1">z77</data>
+</node>
+<node id="78">
+  <data key="d0">unassigned</data>
+  <data key="d1">z78</data>
+</node>
+<node id="79">
+  <data key="d0">server</data>
+  <data key="d1">s36</data>
+</node>
+<node id="80">
+  <data key="d0">unassigned</data>
+  <data key="d1">z80</data>
+</node>
+<node id="81">
+  <data key="d0">unassigned</data>
+  <data key="d1">z81</data>
+</node>
+<node id="82">
+  <data key="d0">server</data>
+  <data key="d1">s3</data>
+</node>
+<node id="83">
+  <data key="d0">server</data>
+  <data key="d1">s37</data>
+</node>
+<node id="84">
+  <data key="d0">server</data>
+  <data key="d1">s38</data>
+</node>
+<node id="85">
+  <data key="d0">unassigned</data>
+  <data key="d1">z85</data>
+</node>
+<node id="86">
+  <data key="d0">server</data>
+  <data key="d1">s39</data>
+</node>
+<node id="87">
+  <data key="d0">user</data>
+  <data key="d1">u9</data>
+</node>
+<node id="88">
+  <data key="d0">unassigned</data>
+  <data key="d1">z88</data>
+</node>
+<node id="89">
+  <data key="d0">server</data>
+  <data key="d1">s9</data>
+</node>
+<node id="90">
+  <data key="d0">unassigned</data>
+  <data key="d1">z90</data>
+</node>
+<node id="91">
+  <data key="d0">unassigned</data>
+  <data key="d1">z91</data>
+</node>
+<node id="92">
+  <data key="d0">unassigned</data>
+  <data key="d1">z92</data>
+</node>
+<node id="93">
+  <data key="d0">server</data>
+  <data key="d1">s10</data>
+</node>
+<node id="94">
+  <data key="d0">user</data>
+  <data key="d1">u3</data>
+</node>
+<node id="95">
+  <data key="d0">unassigned</data>
+  <data key="d1">z95</data>
+</node>
+<node id="96">
+  <data key="d0">server</data>
+  <data key="d1">s40</data>
+</node>
+<node id="97">
+  <data key="d0">unassigned</data>
+  <data key="d1">z97</data>
+</node>
+<node id="98">
+  <data key="d0">unassigned</data>
+  <data key="d1">z98</data>
+</node>
+<node id="99">
+  <data key="d0">unassigned</data>
+  <data key="d1">z99</data>
+</node>
+<node id="100">
+  <data key="d0">user</data>
+  <data key="d1">u2</data>
+</node>
+<node id="101">
+  <data key="d0">unassigned</data>
+  <data key="d1">z101</data>
+</node>
+<node id="102">
+  <data key="d0">unassigned</data>
+  <data key="d1">z102</data>
+</node>
+<node id="103">
+  <data key="d0">unassigned</data>
+  <data key="d1">z103</data>
+</node>
+<node id="104">
+  <data key="d0">server</data>
+  <data key="d1">s11</data>
+</node>
+<node id="105">
+  <data key="d0">server</data>
+  <data key="d1">s41</data>
+</node>
+<node id="106">
+  <data key="d0">server</data>
+  <data key="d1">s42</data>
+</node>
+<node id="107">
+  <data key="d0">server</data>
+  <data key="d1">s2</data>
+</node>
+<node id="108">
+  <data key="d0">unassigned</data>
+  <data key="d1">z108</data>
+</node>
+<node id="109">
+  <data key="d0">user</data>
+  <data key="d1">u1</data>
+</node>
+<node id="110">
+  <data key="d0">server</data>
+  <data key="d1">s43</data>
+</node>
+<node id="111">
+  <data key="d0">unassigned</data>
+  <data key="d1">z111</data>
+</node>
+<node id="112">
+  <data key="d0">server</data>
+  <data key="d1">s44</data>
+</node>
+<node id="113">
+  <data key="d0">server</data>
+  <data key="d1">s45</data>
+</node>
+<node id="114">
+  <data key="d0">server</data>
+  <data key="d1">s46</data>
+</node>
+<node id="115">
+  <data key="d0">server</data>
+  <data key="d1">s12</data>
+</node>
+<node id="116">
+  <data key="d0">unassigned</data>
+  <data key="d1">z116</data>
+</node>
+<node id="117">
+  <data key="d0">unassigned</data>
+  <data key="d1">z117</data>
+</node>
+<node id="118">
+  <data key="d0">server</data>
+  <data key="d1">s13</data>
+</node>
+<node id="119">
+  <data key="d0">user</data>
+  <data key="d1">u6</data>
+</node>
+<node id="120">
+  <data key="d0">unassigned</data>
+  <data key="d1">z120</data>
+</node>
+<node id="121">
+  <data key="d0">relay</data>
+  <data key="d1">r6</data>
+</node>
+<node id="122">
+  <data key="d0">unassigned</data>
+  <data key="d1">z122</data>
+</node>
+<node id="123">
+  <data key="d0">unassigned</data>
+  <data key="d1">z123</data>
+</node>
+<node id="124">
+  <data key="d0">unassigned</data>
+  <data key="d1">z124</data>
+</node>
+<node id="125">
+  <data key="d0">server</data>
+  <data key="d1">s47</data>
+</node>
+<node id="126">
+  <data key="d0">server</data>
+  <data key="d1">s4</data>
+</node>
+<node id="127">
+  <data key="d0">user</data>
+  <data key="d1">u8</data>
+</node>
+<node id="128">
+  <data key="d0">server</data>
+  <data key="d1">s14</data>
+</node>
+<node id="129">
+  <data key="d0">unassigned</data>
+  <data key="d1">z129</data>
+</node>
+<node id="130">
+  <data key="d0">server</data>
+  <data key="d1">s48</data>
+</node>
+<node id="131">
+  <data key="d0">server</data>
+  <data key="d1">s15</data>
+</node>
+<node id="132">
+  <data key="d0">unassigned</data>
+  <data key="d1">z132</data>
+</node>
+<node id="133">
+  <data key="d0">unassigned</data>
+  <data key="d1">z133</data>
+</node>
+<node id="134">
+  <data key="d0">user</data>
+  <data key="d1">u4</data>
+</node>
+<node id="135">
+  <data key="d0">unassigned</data>
+  <data key="d1">z135</data>
+</node>
+<node id="136">
+  <data key="d0">relay</data>
+  <data key="d1">r4</data>
+</node>
+<node id="137">
+  <data key="d0">server</data>
+  <data key="d1">s17</data>
+</node>
+<node id="138">
+  <data key="d0">server</data>
+  <data key="d1">s18</data>
+</node>
+<node id="139">
+  <data key="d0">server</data>
+  <data key="d1">s19</data>
+</node>
+<node id="140">
+  <data key="d0">unassigned</data>
+  <data key="d1">z140</data>
+</node>
+<node id="141">
+  <data key="d0">server</data>
+  <data key="d1">s0</data>
+</node>
+<node id="142">
+  <data key="d0">server</data>
+  <data key="d1">s49</data>
+</node>
+<node id="143">
+  <data key="d0">server</data>
+  <data key="d1">dns</data>
+</node>
+<node id="144">
+  <data key="d0">user</data>
+  <data key="d1">pu</data>
+</node>
+<node id="145">
+  <data key="d0">relay</data>
+  <data key="d1">r11</data>
+</node>
+<node id="146">
+  <data key="d0">unassigned</data>
+  <data key="d1">z146</data>
+</node>
+<node id="147">
+  <data key="d0">server</data>
+  <data key="d1">s21</data>
+</node>
+<node id="148">
+  <data key="d0">user</data>
+  <data key="d1">u5</data>
+</node>
+<node id="149">
+  <data key="d0">server</data>
+  <data key="d1">s23</data>
+</node>
+<edge source="0" target="1">
+  <data key="d2">13.0</data>
+</edge>
+<edge source="0" target="2">
+  <data key="d2">17.0</data>
+</edge>
+<edge source="0" target="3">
+  <data key="d2">9.0</data>
+</edge>
+<edge source="0" target="4">
+  <data key="d2">14.0</data>
+</edge>
+<edge source="0" target="5">
+  <data key="d2">19.0</data>
+</edge>
+<edge source="0" target="9">
+  <data key="d2">9.0</data>
+</edge>
+<edge source="0" target="10">
+  <data key="d2">10.0</data>
+</edge>
+<edge source="0" target="12">
+  <data key="d2">19.0</data>
+</edge>
+<edge source="0" target="18">
+  <data key="d2">14.0</data>
+</edge>
+<edge source="0" target="22">
+  <data key="d2">15.0</data>
+</edge>
+<edge source="0" target="27">
+  <data key="d2">12.0</data>
+</edge>
+<edge source="0" target="41">
+  <data key="d2">16.0</data>
+</edge>
+<edge source="0" target="43">
+  <data key="d2">18.0</data>
+</edge>
+<edge source="0" target="44">
+  <data key="d2">18.0</data>
+</edge>
+<edge source="0" target="47">
+  <data key="d2">13.0</data>
+</edge>
+<edge source="0" target="52">
+  <data key="d2">17.0</data>
+</edge>
+<edge source="0" target="55">
+  <data key="d2">13.0</data>
+</edge>
+<edge source="0" target="59">
+  <data key="d2">19.0</data>
+</edge>
+<edge source="0" target="67">
+  <data key="d2">12.0</data>
+</edge>
+<edge source="0" target="89">
+  <data key="d2">18.0</data>
+</edge>
+<edge source="0" target="93">
+  <data key="d2">20.0</data>
+</edge>
+<edge source="0" target="95">
+  <data key="d2">12.0</data>
+</edge>
+<edge source="0" target="97">
+  <data key="d2">13.0</data>
+</edge>
+<edge source="0" target="104">
+  <data key="d2">20.0</data>
+</edge>
+<edge source="0" target="115">
+  <data key="d2">16.0</data>
+</edge>
+<edge source="0" target="118">
+  <data key="d2">12.0</data>
+</edge>
+<edge source="1" target="96">
+  <data key="d2">26.0</data>
+</edge>
+<edge source="2" target="6">
+  <data key="d2">26.0</data>
+</edge>
+<edge source="2" target="20">
+  <data key="d2">19.0</data>
+</edge>
+<edge source="2" target="66">
+  <data key="d2">21.0</data>
+</edge>
+<edge source="3" target="26">
+  <data key="d2">22.0</data>
+</edge>
+<edge source="3" target="38">
+  <data key="d2">20.0</data>
+</edge>
+<edge source="3" target="40">
+  <data key="d2">19.0</data>
+</edge>
+<edge source="3" target="45">
+  <data key="d2">26.0</data>
+</edge>
+<edge source="3" target="46">
+  <data key="d2">23.0</data>
+</edge>
+<edge source="3" target="73">
+  <data key="d2">27.0</data>
+</edge>
+<edge source="3" target="86">
+  <data key="d2">23.0</data>
+</edge>
+<edge source="3" target="147">
+  <data key="d2">21.0</data>
+</edge>
+<edge source="4" target="7">
+  <data key="d2">22.0</data>
+</edge>
+<edge source="4" target="8">
+  <data key="d2">13.0</data>
+</edge>
+<edge source="4" target="11">
+  <data key="d2">22.0</data>
+</edge>
+<edge source="4" target="28">
+  <data key="d2">20.0</data>
+</edge>
+<edge source="4" target="42">
+  <data key="d2">22.0</data>
+</edge>
+<edge source="4" target="54">
+  <data key="d2">15.0</data>
+</edge>
+<edge source="4" target="58">
+  <data key="d2">17.0</data>
+</edge>
+<edge source="4" target="75">
+  <data key="d2">20.0</data>
+</edge>
+<edge source="4" target="79">
+  <data key="d2">22.0</data>
+</edge>
+<edge source="4" target="84">
+  <data key="d2">23.0</data>
+</edge>
+<edge source="4" target="103">
+  <data key="d2">17.0</data>
+</edge>
+<edge source="4" target="105">
+  <data key="d2">15.0</data>
+</edge>
+<edge source="4" target="113">
+  <data key="d2">18.0</data>
+</edge>
+<edge source="4" target="128">
+  <data key="d2">15.0</data>
+</edge>
+<edge source="4" target="136">
+  <data key="d2">16.0</data>
+</edge>
+<edge source="4" target="137">
+  <data key="d2">24.0</data>
+</edge>
+<edge source="7" target="19">
+  <data key="d2">20.0</data>
+</edge>
+<edge source="7" target="80">
+  <data key="d2">29.0</data>
+</edge>
+<edge source="8" target="13">
+  <data key="d2">20.0</data>
+</edge>
+<edge source="8" target="21">
+  <data key="d2">25.0</data>
+</edge>
+<edge source="8" target="53">
+  <data key="d2">23.0</data>
+</edge>
+<edge source="8" target="121">
+  <data key="d2">23.0</data>
+</edge>
+<edge source="9" target="29">
+  <data key="d2">25.0</data>
+</edge>
+<edge source="9" target="49">
+  <data key="d2">18.0</data>
+</edge>
+<edge source="9" target="57">
+  <data key="d2">23.0</data>
+</edge>
+<edge source="9" target="98">
+  <data key="d2">22.0</data>
+</edge>
+<edge source="9" target="112">
+  <data key="d2">17.0</data>
+</edge>
+<edge source="9" target="125">
+  <data key="d2">17.0</data>
+</edge>
+<edge source="9" target="138">
+  <data key="d2">20.0</data>
+</edge>
+<edge source="11" target="34">
+  <data key="d2">23.0</data>
+</edge>
+<edge source="11" target="65">
+  <data key="d2">24.0</data>
+</edge>
+<edge source="11" target="116">
+  <data key="d2">25.0</data>
+</edge>
+<edge source="12" target="14">
+  <data key="d2">22.0</data>
+</edge>
+<edge source="12" target="15">
+  <data key="d2">24.0</data>
+</edge>
+<edge source="12" target="85">
+  <data key="d2">23.0</data>
+</edge>
+<edge source="13" target="16">
+  <data key="d2">16.0</data>
+</edge>
+<edge source="13" target="17">
+  <data key="d2">22.0</data>
+</edge>
+<edge source="13" target="23">
+  <data key="d2">16.0</data>
+</edge>
+<edge source="13" target="56">
+  <data key="d2">25.0</data>
+</edge>
+<edge source="13" target="70">
+  <data key="d2">17.0</data>
+</edge>
+<edge source="13" target="71">
+  <data key="d2">17.0</data>
+</edge>
+<edge source="13" target="76">
+  <data key="d2">25.0</data>
+</edge>
+<edge source="13" target="78">
+  <data key="d2">18.0</data>
+</edge>
+<edge source="13" target="88">
+  <data key="d2">23.0</data>
+</edge>
+<edge source="13" target="100">
+  <data key="d2">17.0</data>
+</edge>
+<edge source="13" target="111">
+  <data key="d2">23.0</data>
+</edge>
+<edge source="13" target="119">
+  <data key="d2">18.0</data>
+</edge>
+<edge source="13" target="122">
+  <data key="d2">16.0</data>
+</edge>
+<edge source="14" target="37">
+  <data key="d2">24.0</data>
+</edge>
+<edge source="14" target="51">
+  <data key="d2">23.0</data>
+</edge>
+<edge source="14" target="117">
+  <data key="d2">23.0</data>
+</edge>
+<edge source="14" target="124">
+  <data key="d2">18.0</data>
+</edge>
+<edge source="14" target="127">
+  <data key="d2">26.0</data>
+</edge>
+<edge source="17" target="60">
+  <data key="d2">28.0</data>
+</edge>
+<edge source="18" target="35">
+  <data key="d2">23.0</data>
+</edge>
+<edge source="18" target="39">
+  <data key="d2">20.0</data>
+</edge>
+<edge source="18" target="83">
+  <data key="d2">20.0</data>
+</edge>
+<edge source="18" target="108">
+  <data key="d2">26.0</data>
+</edge>
+<edge source="19" target="24">
+  <data key="d2">17.0</data>
+</edge>
+<edge source="19" target="25">
+  <data key="d2">24.0</data>
+</edge>
+<edge source="19" target="69">
+  <data key="d2">27.0</data>
+</edge>
+<edge source="19" target="72">
+  <data key="d2">23.0</data>
+</edge>
+<edge source="19" target="135">
+  <data key="d2">26.0</data>
+</edge>
+<edge source="19" target="140">
+  <data key="d2">27.0</data>
+</edge>
+<edge source="22" target="30">
+  <data key="d2">18.0</data>
+</edge>
+<edge source="22" target="74">
+  <data key="d2">28.0</data>
+</edge>
+<edge source="24" target="94">
+  <data key="d2">23.0</data>
+</edge>
+<edge source="25" target="77">
+  <data key="d2">27.0</data>
+</edge>
+<edge source="26" target="32">
+  <data key="d2">24.0</data>
+</edge>
+<edge source="26" target="99">
+  <data key="d2">29.0</data>
+</edge>
+<edge source="27" target="33">
+  <data key="d2">18.0</data>
+</edge>
+<edge source="27" target="82">
+  <data key="d2">25.0</data>
+</edge>
+<edge source="27" target="91">
+  <data key="d2">24.0</data>
+</edge>
+<edge source="27" target="107">
+  <data key="d2">28.0</data>
+</edge>
+<edge source="27" target="126">
+  <data key="d2">26.0</data>
+</edge>
+<edge source="28" target="50">
+  <data key="d2">30.0</data>
+</edge>
+<edge source="30" target="31">
+  <data key="d2">19.0</data>
+</edge>
+<edge source="30" target="48">
+  <data key="d2">20.0</data>
+</edge>
+<edge source="32" target="62">
+  <data key="d2">22.0</data>
+</edge>
+<edge source="35" target="36">
+  <data key="d2">29.0</data>
+</edge>
+<edge source="39" target="63">
+  <data key="d2">30.0</data>
+</edge>
+<edge source="41" target="61">
+  <data key="d2">23.0</data>
+</edge>
+<edge source="42" target="64">
+  <data key="d2">28.0</data>
+</edge>
+<edge source="44" target="68">
+  <data key="d2">24.0</data>
+</edge>
+<edge source="45" target="87">
+  <data key="d2">21.0</data>
+</edge>
+<edge source="47" target="114">
+  <data key="d2">26.0</data>
+</edge>
+<edge source="52" target="139">
+  <data key="d2">27.0</data>
+</edge>
+<edge source="55" target="131">
+  <data key="d2">23.0</data>
+</edge>
+<edge source="57" target="81">
+  <data key="d2">26.0</data>
+</edge>
+<edge source="57" target="109">
+  <data key="d2">24.0</data>
+</edge>
+<edge source="60" target="102">
+  <data key="d2">22.0</data>
+</edge>
+<edge source="62" target="129">
+  <data key="d2">22.0</data>
+</edge>
+<edge source="64" target="92">
+  <data key="d2">26.0</data>
+</edge>
+<edge source="64" target="132">
+  <data key="d2">29.0</data>
+</edge>
+<edge source="64" target="145">
+  <data key="d2">23.0</data>
+</edge>
+<edge source="65" target="133">
+  <data key="d2">29.0</data>
+</edge>
+<edge source="67" target="149">
+  <data key="d2">29.0</data>
+</edge>
+<edge source="75" target="143">
+  <data key="d2">26.0</data>
+</edge>
+<edge source="77" target="90">
+  <data key="d2">28.0</data>
+</edge>
+<edge source="81" target="123">
+  <data key="d2">28.0</data>
+</edge>
+<edge source="85" target="142">
+  <data key="d2">20.0</data>
+</edge>
+<edge source="88" target="120">
+  <data key="d2">20.0</data>
+</edge>
+<edge source="91" target="141">
+  <data key="d2">22.0</data>
+</edge>
+<edge source="92" target="146">
+  <data key="d2">26.0</data>
+</edge>
+<edge source="95" target="106">
+  <data key="d2">20.0</data>
+</edge>
+<edge source="97" target="110">
+  <data key="d2">30.0</data>
+</edge>
+<edge source="98" target="101">
+  <data key="d2">20.0</data>
+</edge>
+<edge source="102" target="134">
+  <data key="d2">20.0</data>
+</edge>
+<edge source="103" target="130">
+  <data key="d2">24.0</data>
+</edge>
+<edge source="108" target="144">
+  <data key="d2">28.0</data>
+</edge>
+<edge source="136" target="148">
+  <data key="d2">30.0</data>
+</edge>
+</graph></graphml>
