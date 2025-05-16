@@ -14,6 +14,9 @@ import configparser
 import time
 import datetime
 from pprint import pprint
+import pickle
+
+
 logger = logging.getLogger('ranpad2')
 def init_directories():
     # Create a results dir if it doesn't exist yet
@@ -26,6 +29,7 @@ def init_directories():
     makedirs(output_dir)
 
     return output_dir
+
 def config_logger(args):
     # Set file
     log_file = sys.stdout
@@ -53,7 +57,7 @@ def parse_arguments():
                         help='Path to the directory with the traffic traces to be simulated.')
     parser.add_argument('-format',
                         metavar='<suffix of a file>',
-                        default = '',
+                        default = '.npz',
                         help='suffix of a file.')
     parser.add_argument('-c', '--config',
                         dest="section",
@@ -74,11 +78,22 @@ def parse_arguments():
     config_logger(args)
     return args,config
 
-def load_trace(fdir):
-    with open(fdir,'r') as f:
-        tmp = f.readlines()
-    t = pd.Series(tmp).str.slice(0,-1).str.split('\t',expand = True).astype('float')
-    return np.array(t)
+def load_trace(fdir, trace_id):
+    # with open(fdir,'r') as f:
+    #     tmp = f.readlines()
+    # t = pd.Series(tmp).str.slice(0,-1).str.split('\t',expand = True).astype('float')
+    # return np.array(t)
+
+    site_id = int(os.path.basename(fdir).split('_')[1])
+    with open(fdir, 'rb') as f:
+        site_data = pickle.load(f)
+
+    trace = site_data[site_id][trace_id]
+    timestamps = np.cumsum(np.abs(trace)) #???
+    # timestamps = np.abs(trace)
+    directions = np.sign(trace)
+
+    return np.vstack((timestamps, directions)).T, trace_id, site_id
 
 def dump(trace, fname):
     global output_dir
@@ -87,20 +102,29 @@ def dump(trace, fname):
             fo.write("{:.4f}".format(packet[0]) +'\t' + "{}".format(int(packet[1]))\
                 + ct.NL)
 
-def simulate(fdir):
-    print(fdir)
-    if not os.path.exists(fdir):
-        return
-    else:
-        print(fdir,"file exists")
+def simulate(finfo):
+    # print(fdir)
+    # if not os.path.exists(fdir):
+    #     return
+    # else:
+    #     print(fdir,"file exists")
     #print(fdir)
     # logger.debug("Simulating trace {}".format(fdir))
+
+    fdir, trace_id = finfo
+    if not os.path.exists(fdir):
+        print(f"Missing: {fdir}")
+        return
+    
     np.random.seed(datetime.datetime.now().microsecond)
-    trace = load_trace(fdir)
-    trace = RP(trace)
-    print("trace",trace)
-    fname = fdir.split('/')[-1]
-    dump(trace, fname)
+    original_trace, trace_id, site_id = load_trace(fdir, trace_id)
+    padded_trace = RP(original_trace)
+
+    original_fname = f'site_{site_id}_trace:{trace_id}_original.txt'
+    dump(original_trace, original_fname)
+    # print("trace",trace)
+    fname = f'site_{site_id}_trace:{trace_id}.txt'
+    dump(padded_trace, fname)
 
 def RP(trace):
     # format: [[time, pkt],[...]]
@@ -143,9 +167,9 @@ def RP(trace):
 
     
     # print("client_timetable")
-    # print(client_timetable[:10])
-    client_pkts = np.concatenate((client_timetable, 888*np.ones((len(client_timetable),1))),axis = 1)
-    server_pkts = np.concatenate((server_timetable, -888*np.ones((len(server_timetable),1))),axis = 1)
+    print(client_timetable[:10])
+    client_pkts = np.concatenate((client_timetable, 2*np.ones((len(client_timetable),1))),axis = 1)
+    server_pkts = np.concatenate((server_timetable, -2*np.ones((len(server_timetable),1))),axis = 1)
 
 
     noisy_trace = np.concatenate( (trace, client_pkts, server_pkts), axis = 0)
@@ -186,21 +210,28 @@ if __name__ == '__main__':
     max_wnd = float(config.get('max_wnd',10))
     min_wnd = float(config.get('min_wnd',10))
     
-    MON_SITE_NUM = int(config.get('mon_site_num', 10))
-    MON_INST_NUM = int(config.get('mon_inst_num', 10))
-    UNMON_SITE_NUM = int(config.get('unmon_site_num', 100))
-    print("client_min_dummy_pkt_num:{}".format(client_min_dummy_pkt_num))
-    print("server_min_dummy_pkt_num:{}".format(server_min_dummy_pkt_num))
-    print("client_dummy_pkt_num: {}\nserver_dummy_pkt_num: {}".format(client_dummy_pkt_num,server_dummy_pkt_num))
-    print("max_wnd: {}\nmin_wnd: {}".format(max_wnd,min_wnd))
-    print("start_padding_time:", start_padding_time)
+    # MON_SITE_NUM = int(config.get('mon_site_num', 10))
+    # MON_INST_NUM = int(config.get('mon_inst_num', 10))
+    # UNMON_SITE_NUM = int(config.get('unmon_site_num', 100))
+    # print("client_min_dummy_pkt_num:{}".format(client_min_dummy_pkt_num))
+    # print("server_min_dummy_pkt_num:{}".format(server_min_dummy_pkt_num))
+    # print("client_dummy_pkt_num: {}\nserver_dummy_pkt_num: {}".format(client_dummy_pkt_num,server_dummy_pkt_num))
+    # print("max_wnd: {}\nmin_wnd: {}".format(max_wnd,min_wnd))
+    # print("start_padding_time:", start_padding_time)
     
+    site_ids = [3, 10, 62, 82]
+    traces_per_site = 100
     flist  = []
-    for i in range(MON_SITE_NUM):
-        for j in range(MON_INST_NUM):
-            flist.append(join(args.p, str(i)+'-'+str(j)+args.format))
-    for i in range(UNMON_SITE_NUM):
-        flist.append(join(args.p, str(i)+args.format))
+    # for i in range(MON_SITE_NUM):
+    #     for j in range(MON_INST_NUM):
+    #         flist.append(join(args.p, str(i)+'-'+str(j)+args.format))
+    # for i in range(UNMON_SITE_NUM):
+    #     flist.append(join(args.p, str(i)+args.format))
+
+    for site_id in site_ids:
+        fpath = join(args.p, f"website_{site_id}_processed{args.format}")
+        for trace_id in range(traces_per_site):
+            flist.append((fpath, trace_id))
 
     # Init run directories
     output_dir = init_directories()
