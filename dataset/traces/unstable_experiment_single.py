@@ -39,7 +39,7 @@ def perturb_link_delays(input_path="network_config.txt",
     """
     # Derive the output path
     base, ext = os.path.splitext(input_path)
-    temp_output_path = f"{base}temp-{ext}"
+    temp_output_path = f"{base}-temp{ext}"
 
     with open(input_path, "r") as infile:
         lines = infile.readlines()
