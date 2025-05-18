@@ -84,7 +84,7 @@ def perturb_link_delays(input_path="network_config.txt",
 
 if __name__ == '__main__':
     experiment_dir = '/home/wrana_michael/experiment_data' # experiment data home directory
-    topo_file = f'{experiment_dir}/topologies/ba-topo.conf' # Mininet topology file directory
+    topo_file = f'{experiment_dir}/topologies/ba-topo-unstable.conf' # Mininet topology file directory
 
     website_dir = f'{experiment_dir}/websites' # folder containing website HTML files
     config_dir = f'{website_dir}/config' # website and experimental configuration file
