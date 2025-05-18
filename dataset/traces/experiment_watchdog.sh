@@ -1,8 +1,18 @@
 #!/bin/bash
 
+# Usage: ./experiment_watchdog.sh PYTHON_SCRIPT TIMEOUT_SECS TARGET_COUNT
+
+SCRIPT_NAME=$1
+TIMEOUT_SECS=$2
+TARGET_COUNT=$3
+
+if [ -z "$SCRIPT_NAME" ] || [ -z "$TIMEOUT_SECS" ] || [ -z "$TARGET_COUNT" ]; then
+    echo "Usage: $0 PYTHON_SCRIPT TIMEOUT_SECS TARGET_COUNT"
+    exit 1
+fi
+
 # Folder to monitor
 WATCH_DIR="/home/wrana_michael/experiment_data/output/"
-TARGET_COUNT=100
 MIN_SIZE=1048576  # 1MB in bytes
 
 # Handle Ctrl+C and forward to subprocess
@@ -27,10 +37,9 @@ while true; do
         break
     fi
 
-    echo "Running new_experiment.py (timeout: 1000s)..."
-    
-    # Start command in a new process group
-    setsid bash -c 'sudo timeout 1000s python3 new_experiment_single.py' &
+    echo "Running $SCRIPT_NAME (timeout: ${TIMEOUT_SECS}s)..."
+
+    setsid bash -c "sudo timeout ${TIMEOUT_SECS}s python3 $SCRIPT_NAME" &
     child_pid=$!
     wait $child_pid
 done
