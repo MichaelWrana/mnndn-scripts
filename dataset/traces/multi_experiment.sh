@@ -17,7 +17,7 @@ for (( i=START; i<=STOP; i++ )); do
   echo "Generating data for website $i..."
 
   # Replace wid="website_i" in the script file
-  sed -i "s/wid=\"website_[0-9]\{1,2\}\"/wid=\"website_$i\"/" "$SCRIPT_FILENAME"
+  sed -i "s/wid *= *\"website_[0-9]\{1,2\}\"/wid = \"website_$i\"/" "$SCRIPT_FILENAME"
 
   # Run the experiment watchdog
   bash experiment_watchdog.sh "$SCRIPT_FILENAME" "$TIMEOUT_SECS" "$TARGET_COUNT"
