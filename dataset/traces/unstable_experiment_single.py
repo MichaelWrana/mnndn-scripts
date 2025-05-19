@@ -1,10 +1,8 @@
-import sys
 import os
 import pickle
 import random
 import time
 import numpy as np
-import argparse
 
 from mininet.log import setLogLevel, info
 from minindn.minindn import Minindn
