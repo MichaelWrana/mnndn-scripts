@@ -106,7 +106,7 @@ if __name__ == '__main__':
     if not os.path.exists(output_dir):
         os.makedirs(output_dir) # Create the folder if it doesn't exist
 
-    temp_topo_file = perturb_link_delays(topo_file, min_delta=0, max_delta=10)
+    temp_topo_file = perturb_link_delays(topo_file, min_delta=0, max_delta=5)
 
     # setup mini-ndn network
     setLogLevel('info')
