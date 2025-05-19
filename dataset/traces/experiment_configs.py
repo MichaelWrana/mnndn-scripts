@@ -39,19 +39,22 @@ def single_website_nodefense(ndn, config, website_dir, image_dir, output_dir, wi
         create_logs(obj)
         advertise_prefix(host=obj, prefix=f'/{name}')
 
+    # create a DNS record for this website
+    dns['dns'].cmd(f'echo {wid}:{sid}/{wid}/index.html > {wid}_dns_record.txt')
+
+    # host the website DNS record on the DNS server
+    put_file(
+        host=dns['dns'], 
+        address=f'dns/{wid}',
+        data=f'{wid}_dns_record.txt'
+        )
+
     # host the website
     put_file(
         host=servers[sid], 
         address=f'{sid}/{wid}/index.html',
         data=f'{website_dir}/{wid}/index.html'
         )    
-    
-    # host the website address in the DNS server
-    put_file(
-        host=dns['dns'], 
-        address=f'dns/{wid}',
-        data=f'{wid}:{sid}/{wid}/index.html'
-        )   
 
     # host the resources for that website
     for image in images:

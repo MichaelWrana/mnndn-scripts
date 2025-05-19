@@ -37,7 +37,7 @@ def put_file(host, address, data, verbose=1):
     found = 0
     while(found==0):
         found = int(host.cmd(f'if grep -q {address} {log_folder}/putchunks.log; then echo 1; else echo 0; fi'))
-        sleep(0.25)
+        sleep(0.01)
 
 def get_file(host, address, dest, verbose=1):
     cmd = f'ndncatchunks {address} > {dest} 2>> {log_folder}/catchunks.log 2>&1'
