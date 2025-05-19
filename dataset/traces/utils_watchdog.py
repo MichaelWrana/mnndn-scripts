@@ -49,7 +49,7 @@ def get_file(host, address, dest, verbose=1):
     #print(out)
     #sleep(cat_slp)
 
-def dns_request(client, data_name, server_mapping, cache_hit_proba = 0.85):
+def dns_request(client, data_name, cache_hit_proba = 0.75):
     # make DNS directory to save previous requests by this host
     client.cmd(f'[ -d "dns" ] || mkdir -p "dns"')
 
@@ -60,11 +60,6 @@ def dns_request(client, data_name, server_mapping, cache_hit_proba = 0.85):
             address=f'dns/{data_name}',
             dest=f'dns/{data_name}.dns'
         )
-
-    # now, return the server name
-    for server_name, content in server_mapping.items():
-        if data_name in content:
-            return server_name.lower()
 
 def start_packet_recording(host, filename, verbose=1):
     cmd = f'sudo tcpdump -w {filename} -i any & echo $! > tcpdump.pid'

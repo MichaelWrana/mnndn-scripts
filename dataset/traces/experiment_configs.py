@@ -19,13 +19,12 @@ def single_website_nodefense(ndn, config, website_dir, image_dir, output_dir, wi
     website_to_image,server_to_website,server_to_image = config
     server_to_website = reformat_dict(server_to_website)
     server_to_image = reformat_dict(server_to_image)
-
-    # 5% chance for each user to request resources before the primary user.
-    image_request_proba = 0.05
+    
+    image_request_proba = 0.05 # 5% chance for each user to request resources before the primary user.
+    cache_hit_proba = 0.75 #75% chance there is no need for a DNS request before the main website
 
     dns = {'dns': ndn.net['dns']}
     pu = {'pu': ndn.net['pu']}
-    relays = {f"r{i}": ndn.net[f"r{i}"] for i in range(12)}
     users = {f"u{i}": ndn.net[f"u{i}"] for i in range(10)}
 
     # determine the server we will need to setup - do not configure anything else
@@ -36,7 +35,7 @@ def single_website_nodefense(ndn, config, website_dir, image_dir, output_dir, wi
     images = website_to_image[wid]
 
     # advertise to the NDN network the prefixes for the chosen user, servers, and DNS
-    for name, obj in {**dns, **pu, **relays, **users, **servers}.items():
+    for name, obj in {**dns, **pu, **users, **servers}.items():
         create_logs(obj)
         advertise_prefix(host=obj, prefix=f'/{name}')
 
@@ -46,6 +45,13 @@ def single_website_nodefense(ndn, config, website_dir, image_dir, output_dir, wi
         address=f'{sid}/{wid}/index.html',
         data=f'{website_dir}/{wid}/index.html'
         )    
+    
+    # host the website address in the DNS server
+    put_file(
+        host=dns['dns'], 
+        address=f'dns/{wid}',
+        data=f'{wid}:{sid}/{wid}/index.html'
+        )   
 
     # host the resources for that website
     for image in images:
@@ -73,8 +79,8 @@ def single_website_nodefense(ndn, config, website_dir, image_dir, output_dir, wi
     chosen_client.cmd(f'mkdir {wid}')
     start_packet_recording(chosen_client,f'{output_dir}/{wid}.pcap')
 
-    # TODO: NDN-DNS REQUEST
-    #server_prefix = dns_request(chosen_client, website, server_to_website)
+    # NDN-DNS REQUEST
+    dns_request(chosen_client, wid, cache_hit_proba)
 
     # request the index page of the website -> save to local directory
     get_file(
