@@ -88,10 +88,9 @@ def load_trace(fdir, trace_id):
     with open(fdir, 'rb') as f:
         site_data = pickle.load(f)
 
-    trace = site_data[site_id][trace_id]
-    timestamps = np.cumsum(np.abs(trace)) #???
-    # timestamps = np.abs(trace)
-    directions = np.sign(trace)
+        trace = site_data[site_id][trace_id]
+        timestamps = np.abs(trace)
+        directions = np.sign(trace)
 
     return np.vstack((timestamps, directions)).T, trace_id, site_id
 
@@ -120,8 +119,8 @@ def simulate(finfo):
     original_trace, trace_id, site_id = load_trace(fdir, trace_id)
     padded_trace = RP(original_trace)
 
-    original_fname = f'site_{site_id}_trace:{trace_id}_original.txt'
-    dump(original_trace, original_fname)
+    # original_fname = f'site_{site_id}_trace:{trace_id}_original.txt'
+    # dump(original_trace, original_fname)
     # print("trace",trace)
     fname = f'site_{site_id}_trace:{trace_id}.txt'
     dump(padded_trace, fname)
@@ -137,7 +136,7 @@ def RP(trace):
     global client_min_dummy_pkt_num
     global server_min_dummy_pkt_num
     
-    print("min_wnd in RP",min_wnd)
+    # print("min_wnd in RP",min_wnd)
     
     client_wnd = np.random.uniform(min_wnd, max_wnd)
     server_wnd = np.random.uniform(min_wnd, max_wnd)
@@ -154,7 +153,6 @@ def RP(trace):
     logger.debug("client pkt:", client_dummy_pkt)
     logger.debug("server pkt:", server_dummy_pkt)
 
-
     first_incoming_pkt_time = trace[np.where(trace[:,1] <0)][0][0]
     last_pkt_time = trace[-1][0]    
     
@@ -164,13 +162,11 @@ def RP(trace):
     server_timetable = getTimestamps(server_wnd, server_dummy_pkt)
     server_timetable[:,0] += first_incoming_pkt_time
     server_timetable = server_timetable[np.where(start_padding_time+server_timetable[:,0] <= last_pkt_time)]
-
-    
+   
     # print("client_timetable")
-    print(client_timetable[:10])
+    # print(client_timetable[:10])
     client_pkts = np.concatenate((client_timetable, 2*np.ones((len(client_timetable),1))),axis = 1)
     server_pkts = np.concatenate((server_timetable, -2*np.ones((len(server_timetable),1))),axis = 1)
-
 
     noisy_trace = np.concatenate( (trace, client_pkts, server_pkts), axis = 0)
     noisy_trace = noisy_trace[ noisy_trace[:, 0].argsort(kind = 'mergesort')]
@@ -185,10 +181,22 @@ def getTimestamps(wnd, num):
     # timestamps = np.fromiter(map(lambda x: x if x <= wnd else wnd, timestamps),dtype = float)
     return np.reshape(timestamps, (len(timestamps),1))
 
-
 def parallel(flist, n_jobs = 20):
     pool = mp.Pool(n_jobs)
     pool.map(simulate, flist)
+
+def convert_to_signed_trace(trace):
+    times = trace[:, 0]
+    dirs = trace[:, 1]
+    signed_trace = times * dirs
+    return signed_trace 
+
+def save_traces_npz_format(site_id, traces_dict, label):
+    global output_dir
+    filename = f"website_{site_id}_{label}.npz"
+    filepath = join(output_dir, filename)
+    with open(filepath, 'wb') as f:
+        pickle.dump({site_id: traces_dict}, f)
 
 
 if __name__ == '__main__':
@@ -199,12 +207,14 @@ if __name__ == '__main__':
     global max_wnd
     global min_wnd 
     global start_padding_time
+    
     args, config = parse_arguments()
     logger.info(args)
 
     client_min_dummy_pkt_num = int(config.get('client_min_dummy_pkt_num',1))
     server_min_dummy_pkt_num = int(config.get('server_min_dummy_pkt_num',1))
     client_dummy_pkt_num = int(config.get('client_dummy_pkt_num',300))
+    print(client_dummy_pkt_num)
     server_dummy_pkt_num = int(config.get('server_dummy_pkt_num',300))
     start_padding_time = int(config.get('start_padding_time', 0))
     max_wnd = float(config.get('max_wnd',10))
@@ -219,7 +229,7 @@ if __name__ == '__main__':
     # print("max_wnd: {}\nmin_wnd: {}".format(max_wnd,min_wnd))
     # print("start_padding_time:", start_padding_time)
     
-    site_ids = [3, 10, 62, 82]
+    site_ids = 100
     traces_per_site = 100
     flist  = []
     # for i in range(MON_SITE_NUM):
@@ -228,23 +238,67 @@ if __name__ == '__main__':
     # for i in range(UNMON_SITE_NUM):
     #     flist.append(join(args.p, str(i)+args.format))
 
-    for site_id in site_ids:
-        fpath = join(args.p, f"website_{site_id}_processed{args.format}")
-        for trace_id in range(traces_per_site):
-            flist.append((fpath, trace_id))
+    # for site_id in range(site_ids):
+    #     fpath = join(args.p, f"website_{site_id}_processed{args.format}")
+    #     for trace_id in range(traces_per_site):
+    #         flist.append((fpath, trace_id))
+
 
     # Init run directories
     output_dir = init_directories()
     logger.info("Traces are dumped to {}".format(output_dir))
     start = time.time()
-    print("flist",flist)
+    # print("flist",flist)
     
+    # for i,f in enumerate(flist):
+    #     logger.debug('Simulating {}'.format(f))
+    #     if i %2000 == 0:
+    #         print(r"Done for inst ",i,flush = True)
+    #     simulate(f)
+    #     #break
+
+    #parallel(flist)
+    #logger.info("Time: {}".format(time.time()-start))
+
+    for site_id in range(site_ids):
+        fpath = join(args.p, f"website_{site_id}_processed{args.format}")
+        # original_traces = []
+        padded_traces = []
+
+        if not os.path.exists(fpath):
+            print(f"File missing for site {site_id}: {fpath}")
+            continue
+        
+        with open(fpath, 'rb') as f:
+            site_data = pickle.load(f)
+
+        trace_list = site_data.get(site_id, [])
+        trace_count = len(trace_list)
+
+        if trace_count != 100:
+            print(f"For site {site_id} only {trace_count}")
+
+        for trace_id in range(trace_count):
+            trace, _, _ = load_trace(fpath, trace_id)
+            padded = RP(trace)
+
+            # original_signed = convert_to_signed_trace(trace)
+            padded_signed = convert_to_signed_trace(padded)
+
+            # original_traces.append(original_signed)
+            padded_traces.append(padded_signed)
+            
+        filepath = join(args.p, f"website_{site_id}_processed{args.format}")
+        for trace_id in range(trace_count):
+            flist.append((filepath, trace_id))
+        
+        save_traces_npz_format(site_id, padded_traces, label="padded")
+        # save_traces_npz_format(site_id, original_traces, label="original")
+
     for i,f in enumerate(flist):
         logger.debug('Simulating {}'.format(f))
         if i %2000 == 0:
             print(r"Done for inst ",i,flush = True)
         simulate(f)
-        #break
 
-    #parallel(flist)
-    #logger.info("Time: {}".format(time.time()-start))
+    #if needed uncomment parts with "original" to transform traces to txt format 
