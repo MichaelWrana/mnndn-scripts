@@ -43,9 +43,12 @@ def regulator_download(target_trace):
     added_packets = int(download_start*10)
     for i in range(added_packets):
         pkt_time = i*.1
-        output_trace.append(pkt_time)
+        # output_trace.append(pkt_time)
+        output_trace.append((pkt_time, -2))  # Dummy packet
 
-    output_trace.append(target_trace[position])
+
+    # output_trace.append(target_trace[position])
+    output_trace.append((target_trace[position], -1))  # Real packet
     current_time = download_start
     burst_time = target_trace[position]
     
@@ -84,11 +87,13 @@ def regulator_download(target_trace):
             continue
         elif(queue_length == 0 and padding_packets < padding_budget):
             #no packets waiting, but padding budget not reached
-            output_trace.append(current_time)
+            # output_trace.append(current_time)
+            output_trace.append((current_time, -2))  # Dummy download
             padding_packets += 1
         else:
             #real packet to send
-            output_trace.append(current_time)
+            # output_trace.append(current_time)
+            output_trace.append((current_time, -1))  # Real download
             position += 1
        
     return output_trace
@@ -102,57 +107,107 @@ def regulator_upload_full(download_trace, upload_trace):
 
     #send one upload packet for every $upload_ratio download packets 
     upload_size = int(len(download_trace)/upload_ratio)
-    output_trace = list(np.random.choice(download_trace, upload_size))
+    # output_trace = list(np.random.choice(download_trace, upload_size))
+    download_times = [t for t, d in download_trace if d == -1]  # Only real downloads
+    dummy_uploads = list(np.random.choice(download_times, upload_size))
+
+
+    output_trace = [(t, 2) for t in dummy_uploads]
 
     #send at constant rate at first
-    download_start = download_trace[10]
+    download_start = download_trace[10][0]
     added_packets = int(download_start*5)
     for i in range(added_packets):
         pkt_time = i*.2
-        output_trace.append(pkt_time)
+        # output_trace.append(pkt_time)
+        output_trace.append((pkt_time, 2)) #dummy uploads
 
     #assign each packet to the next scheduled sending time in the output trace
-    output_trace = sorted(output_trace)
+    # output_trace = sorted(output_trace)
+    output_trace = sorted(output_trace, key=lambda x: x[0])  # sort by time
     delay_packets = []
     packet_position = 0
-    for t in upload_trace:
+    # for t in upload_trace:
+    #     found_packet = False
+    #     for p in range(packet_position+1, len(output_trace)):
+    #         if(output_trace[p] >= t and (output_trace[p]-t) < delay_cap):
+    #             packet_position = p
+    #             found_packet = True
+    #             break
+ 
+    #     #cap delay at delay_cap seconds
+    #     if(found_packet == False):
+    #         delay_packets.append(t+delay_cap)     
+   
+    # output_trace += delay_packets
+
+    for t, direction in upload_trace:
         found_packet = False
-        for p in range(packet_position+1, len(output_trace)):
-            if(output_trace[p] >= t and (output_trace[p]-t) < delay_cap):
+        for p in range(packet_position + 1, len(output_trace)):
+            if output_trace[p][0] >= t and (output_trace[p][0] - t) < delay_cap:
                 packet_position = p
                 found_packet = True
                 break
- 
-        #cap delay at delay_cap seconds
-        if(found_packet == False):
-            delay_packets.append(t+delay_cap)     
-   
-    output_trace += delay_packets
+
+        if found_packet:
+            delay_packets.append((t, direction))  # Real interest
+        else:
+            delay_packets.append((t + delay_cap, 1))  # Delayed dummy
+
     
-    return sorted(output_trace)
+    # return sorted(output_trace)
+    return sorted(output_trace + delay_packets, key=lambda x: x[0])
+
+
+# def cost_calc(orig_trace, alt_trace):
+#     '''calculate the bandwidth and latency overhead for download traces'''
+#     dummy_padding = len(alt_trace) - len(orig_trace)
+    
+#     latency_cost = 0.0
+#     sending_time = 0.0
+#     last_packet_sent = 0
+#     last_packet_latency = 0.0
+#     for t in orig_trace:
+#         #find next available packet in sending schedule
+#         available = alt_trace[last_packet_sent:]
+#         for p in available:
+#             if(p > t or p == t):
+#                 sending_time = p
+#                 last_packet_sent = alt_trace.index(p)+1
+#                 break
+        
+#         latency_cost += (sending_time - t)
+#         #finds latency of last real packet
+#         last_packet_latency = (sending_time-t)
+    
+#     return (dummy_padding, latency_cost, last_packet_latency)
 
 def cost_calc(orig_trace, alt_trace):
     '''calculate the bandwidth and latency overhead for download traces'''
     dummy_padding = len(alt_trace) - len(orig_trace)
-    
+
     latency_cost = 0.0
     sending_time = 0.0
     last_packet_sent = 0
     last_packet_latency = 0.0
+
+    # Extract just the times from the labeled alt_trace
+    alt_times = [p[0] for p in alt_trace]
+
     for t in orig_trace:
-        #find next available packet in sending schedule
-        available = alt_trace[last_packet_sent:]
+        # Find next available packet in sending schedule
+        available = alt_times[last_packet_sent:]
         for p in available:
-            if(p > t or p == t):
+            if(p >= t):
                 sending_time = p
-                last_packet_sent = alt_trace.index(p)+1
+                last_packet_sent = alt_times.index(p)+1
                 break
-        
+
         latency_cost += (sending_time - t)
-        #finds latency of last real packet
-        last_packet_latency = (sending_time-t)
-    
+        last_packet_latency = (sending_time - t)
+
     return (dummy_padding, latency_cost, last_packet_latency)
+
 
 def cost_calc_max_latency(orig_trace, alt_trace):
     '''calculates latency overhead for upload trace using a more pessimistic method'''
@@ -167,11 +222,15 @@ def cost_calc_max_latency(orig_trace, alt_trace):
     location = 0
     for t in orig_trace:
         #find next available packet in sending schedule
-        available = alt_trace[last_packet_sent:]
+        # available = alt_trace[last_packet_sent:]
+        alt_times = [p[0] for p in alt_trace]
+        available = alt_times[last_packet_sent:]
+
         for p in available:
             if(p > t or p == t):
                 sending_time = p
-                last_packet_sent = alt_trace.index(p)+1
+                # last_packet_sent = alt_trace.index(p)+1
+                last_packet_sent = alt_times.index(p) + 1
                 break
         
         latency_cost += (sending_time - t)
@@ -196,7 +255,10 @@ def simulate(file_name):
 
     #get defended traces
     padded_download = regulator_download(download_packets)
-    padded_upload = regulator_upload_full(padded_download, upload_packets)
+    # padded_upload = regulator_upload_full(padded_download, upload_packets)
+    upload_packets_tagged = [(t, 1) for t in upload_packets]
+    padded_upload = regulator_upload_full(padded_download, upload_packets_tagged)
+
     padded_bandwidth = len(padded_download) + len(padded_upload)
 
     #calculate latency overhead
@@ -204,8 +266,11 @@ def simulate(file_name):
     upload_latency_overhead, _ = cost_calc_max_latency(upload_packets, padded_upload)
     latency_overhead = download_latency_overhead + upload_latency_overhead
 
-    download_packets = [(p, -1) for p in padded_download]
-    upload_packets = [(p, 1) for p in padded_upload]
+    # download_packets = [(p, -1) for p in padded_download]
+    # upload_packets = [(p, 1) for p in padded_upload]
+    download_packets = padded_download
+    upload_packets = padded_upload
+
 
     both_output = sorted(download_packets + upload_packets, key=lambda x: x[0])
 
@@ -228,13 +293,12 @@ def simulate(file_name):
     #     return np.asarray(direction_only), np.int64(website)
 
     if(SAVE_PICKLE):
-        signed_trace = [np.float32(t * d) for t, d in both_output] #timestamp*direction
+        signed_trace = [np.float32(t * d) for t, d in both_output]
 
         if len(signed_trace) > 5000:
             padded_signed_trace = signed_trace[:5000]
         else:
             padded_signed_trace = signed_trace + [0.0] * (5000 - len(signed_trace))
-
         return np.asarray(padded_signed_trace), np.int64(website), np.asarray(signed_trace)
 
 
@@ -261,12 +325,12 @@ if __name__ == '__main__':
         
         output_pkl(trace_list, website_list, args.output_path) 
 
-        # Groups traces by website
+        # Group traces by website
         traces_by_website = defaultdict(list)
         for trace, website in zip(unpadded_trace_list, website_list):
             traces_by_website[website].append(trace)
 
-        # Create one npz file per website 
+        # Save one `.npz` file per website 
         for website, traces in traces_by_website.items():
             out_dict = {website: traces}
             out_path = os.path.join(args.output_path, f"website_{website}_processed.npz")  

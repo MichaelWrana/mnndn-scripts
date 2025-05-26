@@ -1,5 +1,7 @@
 import pickle
 import numpy as np
+import os
+import re
 
 def get_trace(file_name, cutoff_time, cutoff_length):
     '''Given a filename, returns a list representation for processing'''
@@ -10,12 +12,22 @@ def get_trace(file_name, cutoff_time, cutoff_length):
             time = float(line.strip().split('\t')[0])
             direction = line.strip().split('\t')[1]
 
-            if int(direction) > 0:
-                direction = np.int(1)
+            # if int(direction) > 0:
+            #     direction = np.int(1)
+            # else:
+            #     direction = np.int(-1)
+            #properly process directions
+            direction = int(direction)
+            if direction == 0:
+                continue  
+            elif direction > 0:
+                direction = np.int64(1)
             else:
-                direction = np.int(-1)
+                direction = np.int64(-1)
 
-            website = file_name.split('-')[0]
+            # website = file_name.split('-')[0]
+            filename = os.path.basename(file_name)
+            website = int(re.search(r'site_(\d+)', filename).group(1))
             trace_line = (time, direction, website, file_name)
 
             if time < cutoff_time:
