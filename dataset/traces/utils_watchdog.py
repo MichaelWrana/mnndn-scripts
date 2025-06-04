@@ -122,7 +122,6 @@ def get_file_andana(client_name, client_obj, ars, ar_order, interest, dest_file)
     client_obj.cmd(f'echo "{interest}" > andana/interest_{sid}')
     
     # layer encryption in reverse outgoing order
-
     #for ar in reversed(ar_order):
     #    client_obj.cmd(f'openssl enc -aes-256-cbc -salt -in andana/interest_{sid} -out andana/interest_{sid} -pass file:{client_name}_{ar}_sym >> {log_folder}/crypto.log 2>&1')
 
@@ -191,17 +190,13 @@ def get_file_andana(client_name, client_obj, ars, ar_order, interest, dest_file)
 
     print(f'ANDaNA procedure complete, attempted save into {dest_file}')
 
-# handles waiting times to be based on updates to log files
-
+# Other functions that are not needed/abandoned
+'''
 def wait_for_update(host, filepath, check_interval=.5):
     cmd_inner = f'FILE="{filepath}"; initial_mod_time=$(stat --format="%Y" "$FILE"); while true; do if [[ $(stat --format="%Y" "$FILE") -ne $initial_mod_time ]]; then echo "File modified, exiting." >> {log_folder}/watchdog.log; exit 0; fi; sleep {check_interval}; done'
     cmd = f'bash -c \'{cmd_inner}\''
     print(cmd)
     host.cmd(cmd)
-
-# Other functions that are not needed/abandoned
-
-'''
 
 # exchange public keys
 get_public_key(client_obj, server_name)

@@ -176,14 +176,11 @@ def single_website_andana(ndn, config, website_dir, image_dir, output_dir, wid):
     for relay_name, relay_obj in chosen_relays.items():
         share_symmetric_key('pu', chosen_client, relay_name, relay_obj)
 
-    print(chosen_relays)
-    print(relay_order)
-
     sleep(5)
 
     # create a folder to store the data and begin packet recording
     chosen_client.cmd(f'mkdir {wid}')
-    #start_packet_recording(chosen_client,f'{output_dir}/{wid}.pcap')
+    start_packet_recording(chosen_client,f'{output_dir}/{wid}.pcap')
     #dns_request(chosen_client, wid, cache_hit_proba)
 
     get_file_andana(
@@ -194,6 +191,8 @@ def single_website_andana(ndn, config, website_dir, image_dir, output_dir, wid):
         interest=f'{sid}/{wid}/index.html',
         dest_file=f'{wid}/index.html'
     )
+
+    stop_packet_recording(chosen_client)
 
     '''
     # create list of ARs we will use (circuit size 2)
