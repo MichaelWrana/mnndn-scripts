@@ -112,7 +112,7 @@ def single_website_andana(ndn, config, website_dir, image_dir, output_dir, wid):
     server_to_image = reformat_dict(server_to_image)
 
     image_request_proba = 0.05 # 5% chance for each user to request resources before the primary user.
-    cache_hit_proba = 0.75 #75% chance there is no need for a DNS request before the main website
+    cache_hit_proba = 1 #75% chance there is no need for a DNS request before the main website
 
     dns = {'dns': ndn.net['dns']}
     pu = {'pu': ndn.net['pu']}
