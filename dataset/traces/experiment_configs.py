@@ -176,6 +176,9 @@ def single_website_andana(ndn, config, website_dir, image_dir, output_dir, wid):
     for relay_name, relay_obj in chosen_relays.items():
         share_symmetric_key('pu', chosen_client, relay_name, relay_obj)
 
+    print(chosen_relays)
+    print(relay_order)
+
     sleep(5)
 
     # create a folder to store the data and begin packet recording
