@@ -11,7 +11,7 @@ global rec_slp
 adv_slp = 10 # NDN prefix advertisment routing convergence wait time
 put_slp = 2  #NDN putchunks wait time
 cat_slp = 2  #NDN catchunks wait time
-rec_slp = 10  #Wireshark recording wait time
+rec_slp = 2  #Wireshark recording wait time
 
 global log_folder
 log_folder = 'log'
