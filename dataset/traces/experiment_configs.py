@@ -180,7 +180,9 @@ def single_website_andana(ndn, config, website_dir, image_dir, output_dir, wid):
 
     # create a folder to store the data and begin packet recording
     chosen_client.cmd(f'mkdir {wid}')
-    start_packet_recording(chosen_client,f'{output_dir}/{wid}.pcap')
+    
+    #start_packet_recording(chosen_client,f'{output_dir}/{wid}.pcap')
+    
     #dns_request(chosen_client, wid, cache_hit_proba)
 
     get_file_andana(
@@ -192,7 +194,7 @@ def single_website_andana(ndn, config, website_dir, image_dir, output_dir, wid):
         dest_file=f'{wid}/index.html'
     )
 
-    stop_packet_recording(chosen_client)
+    #stop_packet_recording(chosen_client)
 
     '''
     # create list of ARs we will use (circuit size 2)
