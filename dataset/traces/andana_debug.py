@@ -87,6 +87,8 @@ if __name__ == '__main__':
 
     stop_packet_recording(chosen_client)
 
+    MiniNDNCLI(ndn.net)
+
     #single_website_andana(ndn, config, website_dir, image_dir, output_dir, wid)
 
     ndn.stop()
