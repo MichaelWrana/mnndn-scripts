@@ -194,6 +194,16 @@ def single_website_andana(ndn, config, website_dir, image_dir, output_dir, wid):
         dest_file=f'{wid}/index.html'
     )
 
+    for image in images:
+        get_file_andana(
+            client_name='pu',
+            client_obj=chosen_client,
+            ars=chosen_relays,
+            ar_order=relay_order,
+            interest=f'{sid}/images/{image}',
+            dest_file=f'{wid}/{image}.js'
+        )
+
     stop_packet_recording(chosen_client)
 
     '''
