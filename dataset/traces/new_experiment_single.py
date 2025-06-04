@@ -13,7 +13,7 @@ from minindn.apps.app_manager import AppManager
 from minindn.apps.nfd import Nfd
 from minindn.apps.nlsr import Nlsr
 
-from experiment_configs import single_website_nodefense, clear_directory
+from experiment_configs import single_website_nodefense
 
 def get_next_folder_number(base_dir):
     max_num = -1
