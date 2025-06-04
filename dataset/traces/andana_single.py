@@ -1,5 +1,6 @@
 import sys
 import os
+import shutil
 import pickle
 import random
 import time
@@ -13,7 +14,8 @@ from minindn.apps.app_manager import AppManager
 from minindn.apps.nfd import Nfd
 from minindn.apps.nlsr import Nlsr
 
-from experiment_configs import single_website_nodefense, clear_directory
+from utils_watchdog import *
+from experiment_configs import single_website_andana, clear_directory
 
 def get_next_folder_number(base_dir):
     max_num = -1
@@ -24,6 +26,7 @@ def get_next_folder_number(base_dir):
             if num > max_num:
                 max_num = num
     return max_num + 1
+
 
 if __name__ == '__main__':
     experiment_dir = '/home/wrana_michael/experiment_data' # experiment data home directory
@@ -41,6 +44,10 @@ if __name__ == '__main__':
 
     iteration = get_next_folder_number(f'{experiment_dir}/output')
 
+    print(f'Beginning iteration: {iteration}...')
+    start_time = time.time()
+
+    # print iteration number and start timing
     print(f'Beginning iteration: {iteration}...')
     start_time = time.time()
 
@@ -67,7 +74,7 @@ if __name__ == '__main__':
     nfds = AppManager(ndn, ndn.net.hosts, Nfd)
     nlsrs = AppManager(ndn, ndn.net.hosts, Nlsr)
 
-    single_website_nodefense(ndn, config, website_dir, image_dir, output_dir, wid)
+    single_website_andana(ndn, config, website_dir, image_dir, output_dir, wid)
 
     # record runtime
     end_time = time.time()

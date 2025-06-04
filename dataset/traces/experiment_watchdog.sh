@@ -37,6 +37,13 @@ while true; do
         break
     fi
 
+    # Clean /tmp/minindn before each experiment
+    if [ -d /tmp/minindn ]; then
+        echo "Clearing /tmp/minindn..."
+        sudo rm -rf /tmp/minindn/*
+        sudo find /tmp/minindn -mindepth 1 -exec rm -rf {} +
+    fi
+
     echo "Running $SCRIPT_NAME (timeout: ${TIMEOUT_SECS}s)..."
 
     setsid bash -c "sudo timeout ${TIMEOUT_SECS}s python3 $SCRIPT_NAME" &
