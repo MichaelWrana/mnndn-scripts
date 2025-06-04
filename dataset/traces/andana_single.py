@@ -44,9 +44,6 @@ if __name__ == '__main__':
 
     iteration = get_next_folder_number(f'{experiment_dir}/output')
 
-    print(f'Beginning iteration: {iteration}...')
-    start_time = time.time()
-
     # print iteration number and start timing
     print(f'Beginning iteration: {iteration}...')
     start_time = time.time()
