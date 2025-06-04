@@ -74,7 +74,7 @@ if __name__ == '__main__':
     for relay_name, relay_obj in chosen_relays.items():
         share_symmetric_key('a', chosen_client, relay_name, relay_obj)
 
-    start_packet_recording(chosen_client,f'test.pcap')
+    start_packet_recording(chosen_client,f'/home/wrana_michael/experiment_data/website_0.pcap')
 
     get_file_andana(
         client_name='a',
