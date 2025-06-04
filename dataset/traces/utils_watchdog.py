@@ -39,6 +39,17 @@ def put_file(host, address, data, verbose=1):
         found = int(host.cmd(f'if grep -q {address} {log_folder}/putchunks.log; then echo 1; else echo 0; fi'))
         sleep(0.01)
 
+def non_blocking_put_file(host, address, data, verbose=1):
+    cmd = f'bash -c "cat {data} | ndnputchunks {address} >> log/putchunks.log 2>&1 &"'
+    if(verbose):
+        print(cmd)
+    out = host.cmd(cmd)
+
+    found = 0
+    while(found==0):
+        found = int(host.cmd(f'if grep -q {address} {log_folder}/putchunks.log; then echo 1; else echo 0; fi'))
+        sleep(0.01)
+
 def get_file(host, address, dest, verbose=1):
     cmd = f'ndncatchunks {address} > {dest} 2>> {log_folder}/catchunks.log'
     if(verbose):
@@ -144,7 +155,7 @@ def get_file_andana(client_name, client_obj, ars, ar_order, interest, dest_file)
     for i in range(len(andana_names) - 1):
 
         # (1) host interest at current position
-        put_file(
+        non_blocking_put_file(
             host=andana_objects[i],
             address=f'{andana_names[i]}/andana/interest_{sid}',
             data=f'andana/interest_{sid}'
