@@ -131,12 +131,11 @@ def get_file_andana(client_name, client_obj, ars, ar_order, interest, dest_file)
     andana_names = [client_name] + ar_order
     andana_objects = [client_obj] + [ars[id] for id in ar_order]
 
+    print(andana_names)
+    print(andana_objects)
+
     # i = "current" position
     for i in range(len(andana_names) - 1):
-
-        client_obj.cmd(f'ls -lh andana/interest_{sid}')  # Check file size
-        client_obj.cmd(f'file andana/interest_{sid}')    # Check binary type
-        client_obj.cmd(f'head -c 64 andana/interest_{sid} | hexdump -C')  # Peek into content
 
         # (1) host interest at current position
         put_file(
