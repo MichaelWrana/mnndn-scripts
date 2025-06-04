@@ -41,7 +41,7 @@ if __name__ == '__main__':
     ndn.start()
 
     # Configure NDN Nodes
-    info('Starting nfd and nlsr on nodes')
+    info('Starting nfd and nlsr on nodes\n')
     nfds = AppManager(ndn, ndn.net.hosts, Nfd)
     nlsrs = AppManager(ndn, ndn.net.hosts, Nlsr)
 
@@ -51,23 +51,23 @@ if __name__ == '__main__':
         'c':ndn.net['c'],
     }
     chosen_server = {'d':ndn.net['d']}
-    relay_order = ['c','b']
-
+    
     for name, obj in {**clients, **chosen_relays, **chosen_server}.items():
         create_logs(obj)
         advertise_prefix(host=obj, prefix=f'/{name}')
 
     chosen_client = clients['a']
+    relay_order = ['c','b']
 
     put_file(
         host=chosen_server['d'], 
-        address=f'd/website0/index.html',
-        data=f'{website_dir}/website0/index.html'
+        address=f'd/website_0/index.html',
+        data=f'{website_dir}/website_0/index.html'
     )
 
     get_file(
         host=chosen_client,
-        address=f'd/website0/index.html',
+        address=f'd/website_0/index.html',
         dest=f'index.html'
     )
 
@@ -79,7 +79,7 @@ if __name__ == '__main__':
         client_obj=chosen_client,
         ars=chosen_relays,
         ar_order=relay_order,
-        interest=f'd/website0/index.html',
+        interest=f'd/website_0/index.html',
         dest_file=f'index.html'
     )
 
