@@ -131,15 +131,6 @@ def single_website_andana(ndn, config, website_dir, image_dir, output_dir, wid):
         create_logs(obj)
         advertise_prefix(host=obj, prefix=f'/{name}')
 
-    # get a reference to the Minindn VM for this network device to run commands on it
-    chosen_client = pu['pu']
-
-    chosen_relays = dict(random.sample(list(relays.items()), 2))
-    relay_order = chosen_relays.keys()
-
-    for relay_name, relay_obj in chosen_relays.items():
-        share_symmetric_key('pu', chosen_client, relay_name, relay_obj)
-
     print("DONE...CHECK")
 
     # create a DNS record for this website
@@ -177,6 +168,30 @@ def single_website_andana(ndn, config, website_dir, image_dir, output_dir, wid):
                     address=f'{sid}/images/{image}',
                     dest=f'{wid}/{image}.js'
                 )
+
+    # get a reference to the Minindn VM for this network device to run commands on it
+    chosen_client = pu['pu']
+
+    chosen_relays = dict(random.sample(list(relays.items()), 2))
+    relay_order = chosen_relays.keys()
+
+    for relay_name, relay_obj in chosen_relays.items():
+        share_symmetric_key('pu', chosen_client, relay_name, relay_obj)
+
+    # create a folder to store the data and begin packet recording
+    chosen_client.cmd(f'mkdir {wid}')
+    start_packet_recording(chosen_client,f'{output_dir}/{wid}.pcap')
+
+    dns_request(chosen_client, wid, cache_hit_proba)
+
+    get_file_andana(
+        client_name='pu',
+        client_obj=chosen_client,
+        ars=chosen_relays,
+        ar_order=relay_order,
+        interest=f'{sid}/{wid}/index.html',
+        dest_file=f'{wid}/index.html'
+    )
 
     '''
     # create list of ARs we will use (circuit size 2)
