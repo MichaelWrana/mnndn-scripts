@@ -62,8 +62,8 @@ def dns_request(client, data_name, cache_hit_proba = 0.75):
 def start_packet_recording(host, filename, verbose=1):
     cmd = f'sudo tcpdump -w a-eth0.pcap -i a-eth0 & echo $! > a0tcpdump.pid'
     cmd = f'sudo tcpdump -w a-eth1.pcap -i a-eth1 & echo $! > a1tcpdump.pid'
-    cmd = f'sudo tcpdump -w eth0.pcap -i a-eth0 & echo $! > 0tcpdump.pid'
-    cmd = f'sudo tcpdump -w eth1.pcap -i a-eth0 & echo $! > 1tcpdump.pid'
+    cmd = f'sudo tcpdump -w eth0.pcap -i eth0 & echo $! > 0tcpdump.pid'
+    cmd = f'sudo tcpdump -w eth1.pcap -i eth1 & echo $! > 1tcpdump.pid'
     if(verbose):
         print(cmd)
     host.cmd(cmd)
