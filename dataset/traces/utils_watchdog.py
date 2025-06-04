@@ -40,7 +40,7 @@ def put_file(host, address, data, verbose=1):
         sleep(0.01)
 
 def get_file(host, address, dest, verbose=1):
-    cmd = f'ndncatchunks {address} > {dest} 2>> {log_folder}/catchunks.log 2>&1'
+    cmd = f'ndncatchunks {address} > {dest} 2>> {log_folder}/catchunks.log'
     if(verbose):
         print(cmd)
     out = host.cmd(cmd)
