@@ -73,6 +73,9 @@ def start_packet_recording(host, filename, verbose=1):
 def stop_packet_recording(host, verbose=1):
     sleep(rec_slp)
     cmd = f'sudo kill $(cat a0tcpdump.pid)'
+    if(verbose):
+        print(cmd)
+    host.cmd(cmd)
     cmd = f'sudo kill $(cat a1tcpdump.pid)'
     if(verbose):
         print(cmd)
