@@ -123,8 +123,13 @@ def get_file_andana(client_name, client_obj, ars, ar_order, interest, dest_file)
     client_obj.cmd(f'echo "{interest}" > andana/interest_{sid}')
     
     # layer encryption in reverse outgoing order
-    for ar in reversed(ar_order):
-        client_obj.cmd(f'openssl enc -aes-256-cbc -salt -in andana/interest_{sid} -out andana/interest_{sid} -pass file:{client_name}_{ar}_sym >> {log_folder}/crypto.log 2>&1')
+
+    #for ar in reversed(ar_order):
+    #    client_obj.cmd(f'openssl enc -aes-256-cbc -salt -in andana/interest_{sid} -out andana/interest_{sid} -pass file:{client_name}_{ar}_sym >> {log_folder}/crypto.log 2>&1')
+
+    client_obj.cmd(f'ls -lh andana/interest_{sid}')  # Check file size
+    client_obj.cmd(f'file andana/interest_{sid}')    # Check binary type
+    client_obj.cmd(f'head -c 64 andana/interest_{sid} | hexdump -C')  # Peek into content
 
     # merge the original client with AR list for upcoming loop to send the interest along
     andana_names = [client_name] + ar_order
