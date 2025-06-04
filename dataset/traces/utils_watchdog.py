@@ -87,10 +87,6 @@ def stop_packet_recording(host, verbose=1):
     if(verbose):
         print(cmd)
     host.cmd(cmd)
-    cmd = f'sudo kill $(cat a1tcpdump.pid)'
-    if(verbose):
-        print(cmd)
-    host.cmd(cmd)
 
 def get_img_host(image, server_to_image):
     for name, images in server_to_image.items():
