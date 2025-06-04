@@ -60,7 +60,7 @@ def dns_request(client, data_name, cache_hit_proba = 0.75):
         )
 
 def start_packet_recording(host, filename, verbose=1):
-    cmd = f'sudo tcpdump -w {filename} -i any & echo $! > tcpdump.pid'
+    cmd = f'sudo tcpdump -p -w {filename} -i any & echo $! > tcpdump.pid'
     if(verbose):
         print(cmd)
     host.cmd(cmd)
