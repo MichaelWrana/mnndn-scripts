@@ -39,10 +39,11 @@ def put_file(host, address, data, verbose=1):
         found = int(host.cmd(f'if grep -q {address} {log_folder}/putchunks.log; then echo 1; else echo 0; fi'))
         sleep(0.01)
 
-# trying to capture tcpdump traffic with the address < data  causes the shell to open the file and hold the FD open for the child process
-# If the consumer or the file descriptor is delayed (e.g., due to tcpdump, kernel buffering, or delayed interest), this can block the I/O path.
-#cat file | ndnputchunks hands data over via a pipe, avoiding shell FD shenanigans
+# trying to capture tcpdump traffic with the address < data causes the shell to open the file and hold the FD open for the child process
+# If the FD is delayed (e.g., due to tcpdump), this can block the I/O path.
+# cat file | ndnputchunks hands data over via a pipe, avoiding shell FD shenanigans
 # we need to do this only for ANDaNA, where the consumer is sending putchunks while recording traffic
+# sometimes not required at all, even for ANDaNA, may depend on operating system, hardware, and kernel config
 def non_blocking_put_file(host, address, data, verbose=1):
     cmd = f'bash -c "cat {data} | ndnputchunks {address} >> log/putchunks.log 2>&1 &"'
     if(verbose):
@@ -75,7 +76,7 @@ def dns_request(client, data_name, cache_hit_proba = 0.75):
         )
 
 def start_packet_recording(host, filename, verbose=1):
-    cmd = f'sudo tcpdump -w /home/wrana_michael/a-eth0.pcap -i any & echo $! > a0tcpdump.pid'
+    cmd = f'sudo tcpdump -p -w {filename} -i any & echo $! > tcpdump.pid'
     if(verbose):
         print(cmd)
     host.cmd(cmd)
@@ -83,7 +84,7 @@ def start_packet_recording(host, filename, verbose=1):
 
 def stop_packet_recording(host, verbose=1):
     sleep(rec_slp)
-    cmd = f'sudo kill $(cat a0tcpdump.pid)'
+    cmd = f'sudo kill $(cat tcpdump.pid)'
     if(verbose):
         print(cmd)
     host.cmd(cmd)
