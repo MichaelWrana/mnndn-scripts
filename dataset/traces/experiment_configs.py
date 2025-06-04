@@ -131,8 +131,6 @@ def single_website_andana(ndn, config, website_dir, image_dir, output_dir, wid):
         create_logs(obj)
         advertise_prefix(host=obj, prefix=f'/{name}')
 
-    print("DONE...CHECK")
-
     # create a DNS record for this website
     dns['dns'].cmd(f'echo {wid}:{sid}/{wid}/index.html > {wid}_dns_record.txt')
 
@@ -173,7 +171,7 @@ def single_website_andana(ndn, config, website_dir, image_dir, output_dir, wid):
     chosen_client = pu['pu']
 
     chosen_relays = dict(random.sample(list(relays.items()), 2))
-    relay_order = chosen_relays.keys()
+    relay_order = list(chosen_relays.keys())
 
     for relay_name, relay_obj in chosen_relays.items():
         share_symmetric_key('pu', chosen_client, relay_name, relay_obj)
