@@ -15,7 +15,7 @@ from minindn.apps.nfd import Nfd
 from minindn.apps.nlsr import Nlsr
 
 from utils_watchdog import *
-from experiment_configs import single_website_andana, clear_directory
+from experiment_configs import single_website_andana
 
 def get_next_folder_number(base_dir):
     max_num = -1
