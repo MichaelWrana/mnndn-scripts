@@ -43,7 +43,7 @@ def add_jitter_to_random_nodes(ndn, rand_jitter, min_jitter, max_jitter):
         ip_link_output = node.cmd("ip -o link show")
 
         print(ip_link_output)
-        eth_interfaces = re.findall(r'\d+: (eth[0-9]+):', ip_link_output)
+        eth_interfaces = re.findall(r'\d+: (\S*eth\S*)@', ip_link_output)
 
         print(eth_interfaces)
 
