@@ -49,7 +49,7 @@ def add_jitter_to_random_nodes(ndn, rand_jitter, min_jitter, max_jitter):
 
         # Apply jitter on all eth interfaces
         for intf in eth_interfaces:
-            cmd = f"tc qdisc add dev {intf} root netem delay {jitter_val}ms"
+            cmd = f"tc qdisc add dev {intf} root netem delay {jitter_val}ms {jitter_val}ms"
             print(f"[{node.name}] Applying jitter: {cmd}")
             node.cmd(cmd)
 
@@ -137,7 +137,7 @@ if __name__ == '__main__':
     min_unif=0
     max_unif=4
 
-    temp_topo_file = perturb_link_delays(topo_file, min_delta=min_unif, max_delta=max_unif)
+    temp_topo_file = perturb_link_delays(topo_file, min_delta=min_unif+1, max_delta=max_unif)
 
     # setup mini-ndn network
     setLogLevel('info')
