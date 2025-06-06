@@ -1,6 +1,7 @@
 import os
 import pickle
 import random
+import re
 import time
 import numpy as np
 
@@ -33,17 +34,21 @@ def add_jitter_to_random_nodes(ndn, rand_jitter, min_jitter, max_jitter):
     :param max_jitter: Maximum jitter in ms.
     """
     nodes = list(ndn.net.values())
-    print(nodes)
     selected_nodes = random.sample(nodes, min(rand_jitter, len(nodes)))
 
     for node in selected_nodes:
-        print("here")
         # Choose a random jitter value between min and max
         jitter_val = random.randint(min_jitter, max_jitter)
 
+        ip_link_output = node.cmd("ip -o link show")
+
+        print(ip_link_output)
+        eth_interfaces = re.findall(r'\d+: (eth[0-9]+):', ip_link_output)
+
+        print(eth_interfaces)
+
         # Apply jitter on all eth interfaces
-        intfs = [intf for intf in node.intfNames() if intf.startswith('eth')]
-        for intf in intfs:
+        for intf in eth_interfaces:
             cmd = f"tc qdisc add dev {intf} root netem delay {jitter_val}ms"
             print(f"[{node.name}] Applying jitter: {cmd}")
             node.cmd(cmd)
