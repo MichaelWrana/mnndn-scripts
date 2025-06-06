@@ -40,14 +40,14 @@ def single_website_nodefense(ndn, config, website_dir, image_dir, output_dir, wi
         advertise_prefix(host=obj, prefix=f'/{name}')
 
     # create a DNS record for this website
-    dns['dns'].cmd(f'echo {wid}:{sid}/{wid}/index.html > {wid}_dns_record.txt')
+    #dns['dns'].cmd(f'echo {wid}:{sid}/{wid}/index.html > {wid}_dns_record.txt')
 
     # host the website DNS record on the DNS server
-    put_file(
-        host=dns['dns'], 
-        address=f'dns/{wid}',
-        data=f'{wid}_dns_record.txt'
-        )
+    # put_file(
+    #     host=dns['dns'], 
+    #     address=f'dns/{wid}',
+    #     data=f'{wid}_dns_record.txt'
+    #     )
 
     # host the website
     put_file(
@@ -83,7 +83,7 @@ def single_website_nodefense(ndn, config, website_dir, image_dir, output_dir, wi
     start_packet_recording(chosen_client,f'{output_dir}/{wid}.pcap')
 
     # NDN-DNS REQUEST
-    dns_request(chosen_client, wid, cache_hit_proba)
+    #dns_request(chosen_client, wid, cache_hit_proba)
 
     # request the index page of the website -> save to local directory
     get_file(
