@@ -33,9 +33,11 @@ def add_jitter_to_random_nodes(ndn, rand_jitter, min_jitter, max_jitter):
     :param max_jitter: Maximum jitter in ms.
     """
     nodes = list(ndn.net.values())
+    print(nodes)
     selected_nodes = random.sample(nodes, min(rand_jitter, len(nodes)))
 
     for node in selected_nodes:
+        print("here")
         # Choose a random jitter value between min and max
         jitter_val = random.randint(min_jitter, max_jitter)
 
