@@ -24,38 +24,7 @@ def get_next_folder_number(base_dir):
                 max_num = num
     return max_num + 1
 
-def add_jitter_to_random_nodes(ndn, rand_jitter, min_jitter, max_jitter):
-    """
-    Selects random nodes and applies network jitter to their interfaces using `tc`.
-
-    :param ndn: The MiniNDN network object.
-    :param rand_jitter: Number of nodes to apply jitter to.
-    :param min_jitter: Minimum jitter in ms.
-    :param max_jitter: Maximum jitter in ms.
-    """
-    nodes = list(ndn.net.values())
-    selected_nodes = random.sample(nodes, min(rand_jitter, len(nodes)))
-
-    for node in selected_nodes:
-        # Choose a random jitter value between min and max
-        jitter_val = random.randint(min_jitter, max_jitter)
-
-        ip_link_output = node.cmd("ip -o link show")
-
-        print(ip_link_output)
-        eth_interfaces = re.findall(r'\d+: (\S*eth\S*)@', ip_link_output)
-
-        print(eth_interfaces)
-
-        # Apply jitter on all eth interfaces
-        for intf in eth_interfaces:
-            cmd = f"tc qdisc add dev {intf} root netem delay {jitter_val}ms {jitter_val}ms"
-            print(f"[{node.name}] Applying jitter: {cmd}")
-            node.cmd(cmd)
-
-def perturb_link_delays(input_path="network_config.txt",
-                        min_delta=5,
-                        max_delta=15):
+def perturb_link_delays(input_path, min_delta, max_delta):
     """
     Adjusts the delay of each link in a topology file by a random amount within [min_delta, max_delta] ms.
     The modified file is saved with '_temp' appended before the file extension.
@@ -134,10 +103,7 @@ if __name__ == '__main__':
     if not os.path.exists(output_dir):
         os.makedirs(output_dir) # Create the folder if it doesn't exist
 
-    min_unif=0
-    max_unif=4
-
-    temp_topo_file = perturb_link_delays(topo_file, min_delta=min_unif+1, max_delta=max_unif)
+    temp_topo_file = perturb_link_delays(topo_file, min_delta=0, max_delta=4)
 
     # setup mini-ndn network
     setLogLevel('info')
@@ -156,8 +122,6 @@ if __name__ == '__main__':
     info('Starting nfd and nlsr on nodes')
     nfds = AppManager(ndn, ndn.net.hosts, Nfd)
     nlsrs = AppManager(ndn, ndn.net.hosts, Nlsr)
-
-    add_jitter_to_random_nodes(ndn, rand_jitter=30, min_jitter=min_unif, max_jitter=max_unif)
 
     single_website_nodefense(ndn, config, website_dir, image_dir, output_dir, wid)
 
