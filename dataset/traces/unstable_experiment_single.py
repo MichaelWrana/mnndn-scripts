@@ -1,7 +1,6 @@
 import os
 import pickle
 import random
-import re
 import time
 import numpy as np
 
@@ -24,7 +23,9 @@ def get_next_folder_number(base_dir):
                 max_num = num
     return max_num + 1
 
-def perturb_link_delays(input_path, min_delta, max_delta):
+def perturb_link_delays(input_path="network_config.txt",
+                        min_delta=5,
+                        max_delta=15):
     """
     Adjusts the delay of each link in a topology file by a random amount within [min_delta, max_delta] ms.
     The modified file is saved with '_temp' appended before the file extension.
@@ -131,4 +132,3 @@ if __name__ == '__main__':
     print(f"Iteration {iteration} complete. Execution time: {execution_time} seconds")
 
     ndn.stop()
-
