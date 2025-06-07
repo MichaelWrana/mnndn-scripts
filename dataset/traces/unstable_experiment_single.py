@@ -104,8 +104,8 @@ if __name__ == '__main__':
     if not os.path.exists(output_dir):
         os.makedirs(output_dir) # Create the folder if it doesn't exist
 
-    #temp_topo_file = perturb_link_delays(topo_file, min_delta=0, max_delta=4)
-    temp_topo_file = f'{experiment_dir}/topologies/ba-topo.conf'
+    temp_topo_file = perturb_link_delays(topo_file, min_delta=0, max_delta=4)
+    #temp_topo_file = f'{experiment_dir}/topologies/ba-topo.conf'
 
     # setup mini-ndn network
     setLogLevel('info')
