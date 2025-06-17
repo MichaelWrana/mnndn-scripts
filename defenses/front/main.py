@@ -24,8 +24,10 @@ def init_directories():
         makedirs(ct.RESULTS_DIR)
 
     # Define output directory
-    timestamp = strftime('%m%d_%H%M')
+    timestamp = strftime('%m%d_%H%M%S')
     output_dir = join(ct.RESULTS_DIR, 'ranpad2_'+timestamp)
+    # run_label = f"front_{client_dummy_pkt_num}_{server_dummy_pkt_num}_{start_padding_time}_{int(max_wnd)}"
+    # output_dir = join(ct.RESULTS_DIR, run_label)
     makedirs(output_dir)
 
     return output_dir
@@ -73,6 +75,24 @@ def parse_arguments():
                         default='stdout',
                         help='path to the log file. It will print to stdout by default.')
 
+    # parser.add_argument('--client_dummy_pkt_num', 
+    #                     type=int, 
+    #                     default=500)
+
+    # parser.add_argument('--server_dummy_pkt_num', 
+    #                     type=int, 
+    #                     default=600)
+
+    # parser.add_argument('--start_padding_time', 
+    #                     type=int, 
+    #                     default=2)
+
+    # parser.add_argument('--max_wnd', 
+    #                     type=float, 
+    #                     default=6)
+
+
+
     args = parser.parse_args()
     config = dict(conf_parser._sections[args.section])
     config_logger(args)
@@ -89,8 +109,9 @@ def load_trace(fdir, trace_id):
         site_data = pickle.load(f)
 
         trace = site_data[site_id][trace_id]
+        # print (trace)
         timestamps = np.abs(trace)
-        directions = np.sign(trace)
+        directions = np.where(np.signbit(trace), -1, 1)
 
     return np.vstack((timestamps, directions)).T, trace_id, site_id
 
@@ -119,10 +140,10 @@ def simulate(finfo):
     original_trace, trace_id, site_id = load_trace(fdir, trace_id)
     padded_trace = RP(original_trace)
 
-    # original_fname = f'site_{site_id}_trace:{trace_id}_original.txt'
+    # original_fname = f'site_{site_id}_trace_{trace_id}.txt'
     # dump(original_trace, original_fname)
     # print("trace",trace)
-    fname = f'site_{site_id}_trace:{trace_id}.txt'
+    fname = f'site_{site_id}_trace_{trace_id}.txt'
     dump(padded_trace, fname)
 
 def RP(trace):
@@ -142,30 +163,93 @@ def RP(trace):
     server_wnd = np.random.uniform(min_wnd, max_wnd)
     if client_min_dummy_pkt_num != client_dummy_pkt_num:
         client_dummy_pkt = np.random.randint(client_min_dummy_pkt_num,client_dummy_pkt_num)
+        # print(f"num of interests used: {client_dummy_pkt}")
     else:
         client_dummy_pkt = client_dummy_pkt_num
-    if server_min_dummy_pkt_num != server_dummy_pkt_num:
-        server_dummy_pkt = np.random.randint(server_min_dummy_pkt_num,server_dummy_pkt_num)
-    else:
-        server_dummy_pkt = server_dummy_pkt_num
+    # if server_min_dummy_pkt_num != server_dummy_pkt_num:
+    #     server_dummy_pkt = np.random.randint(server_min_dummy_pkt_num,server_dummy_pkt_num)
+    # else:
+    #     server_dummy_pkt = server_dummy_pkt_num
+
+    #ensure more data packets than interest packets
+    server_dummy_pkt = np.random.randint(client_dummy_pkt,server_dummy_pkt_num)
+
     logger.debug("client_wnd:",client_wnd)
     logger.debug("server_wnd:",server_wnd)
     logger.debug("client pkt:", client_dummy_pkt)
     logger.debug("server pkt:", server_dummy_pkt)
 
+    if(server_dummy_pkt < client_dummy_pkt):
+        print(f"More interests than datas")
+
     first_incoming_pkt_time = trace[np.where(trace[:,1] <0)][0][0]
+
     last_pkt_time = trace[-1][0]    
     
     client_timetable = getTimestamps(client_wnd, client_dummy_pkt)
+    #this may cut off packets
     client_timetable = client_timetable[np.where(start_padding_time+client_timetable[:,0] <= last_pkt_time)]
 
+
     server_timetable = getTimestamps(server_wnd, server_dummy_pkt)
-    server_timetable[:,0] += first_incoming_pkt_time
+
+    server_timetable[:,0] += first_incoming_pkt_time ##this was here, but do we need it?
+
+
+    #this may cut off data packets
     server_timetable = server_timetable[np.where(start_padding_time+server_timetable[:,0] <= last_pkt_time)]
-   
-    # print("client_timetable")
-    # print(client_timetable[:10])
-    client_pkts = np.concatenate((client_timetable, 2*np.ones((len(client_timetable),1))),axis = 1)
+
+    # if len(client_timetable) > len(server_timetable):
+    #     print(f"Difference in timetables, interest: {len(client_timetable)}, data: {len(server_timetable)}")
+
+      #to ensure that we have more data packets even if some get cut off  
+    while len(server_timetable) <= len(client_timetable):
+        extra_needed = len(client_timetable) - len(server_timetable) + 1
+        extra_times = sorted(np.random.rayleigh(server_wnd, extra_needed))
+        extra_times = np.reshape(extra_times, (len(extra_times), 1))
+        
+        # only keep the valid extra packets
+        extra_times = extra_times[np.where(start_padding_time + extra_times[:,0] <= last_pkt_time)]
+        
+        if len(extra_times) > 0:
+            server_timetable = np.vstack([server_timetable, extra_times])
+
+    if len(client_timetable) > len(server_timetable):
+        print(f"STILL PROBLEM Difference in timetables, interest: {len(client_timetable)}, data: {len(server_timetable)}")
+
+    
+    # first_server_pkt_time = server_timetable[0][0]
+    # first_client_pkt_time = client_timetable[0][0]
+
+    first_server_pkt_time = np.min(server_timetable[:, 0])
+    
+    #if no interest packets, add one new at the beginning
+    if client_timetable.size == 0:
+        first_pkt_time = trace[0][0]
+
+        if first_pkt_time > first_server_pkt_time:
+            first_pkt_time = 0.0
+
+        dummy_interest_time = np.random.uniform(first_pkt_time, first_server_pkt_time)
+
+        client_timetable = np.array([[dummy_interest_time]])
+        # print("was zero, so added", client_timetable)
+
+    #if trace started with data packets, create a new interest and add it to other interests
+    if client_timetable[0][0] >= first_server_pkt_time:
+        first_pkt_time = trace[0][0]
+
+        if first_pkt_time > first_server_pkt_time:
+            first_pkt_time = 0.0
+
+        # print("used to start with interest: ",client_timetable[0][0] )
+        dummy_interest_time = np.random.uniform(first_pkt_time, first_server_pkt_time)
+
+        client_timetable_row = np.array([[dummy_interest_time]])
+        client_timetable = np.vstack([client_timetable_row, client_timetable])
+        # print(" new first client: ", client_timetable[0][0], "server: ", first_server_pkt_time) 
+
+    client_pkts = np.concatenate((client_timetable, 2*np.ones((len(client_timetable),1))),axis = 1)   #check
     server_pkts = np.concatenate((server_timetable, -2*np.ones((len(server_timetable),1))),axis = 1)
 
     noisy_trace = np.concatenate( (trace, client_pkts, server_pkts), axis = 0)
@@ -212,13 +296,22 @@ if __name__ == '__main__':
     logger.info(args)
 
     client_min_dummy_pkt_num = int(config.get('client_min_dummy_pkt_num',1))
+
+
+    print(f"min of interests {client_min_dummy_pkt_num}")
     server_min_dummy_pkt_num = int(config.get('server_min_dummy_pkt_num',1))
     client_dummy_pkt_num = int(config.get('client_dummy_pkt_num',300))
-    print(client_dummy_pkt_num)
     server_dummy_pkt_num = int(config.get('server_dummy_pkt_num',300))
     start_padding_time = int(config.get('start_padding_time', 0))
     max_wnd = float(config.get('max_wnd',10))
+
+    # client_dummy_pkt_num = args.client_dummy_pkt_num
+    # server_dummy_pkt_num = args.server_dummy_pkt_num
+    # start_padding_time = args.start_padding_time
+    # max_wnd = args.max_wnd
     min_wnd = float(config.get('min_wnd',10))
+
+    # print(client_dummy_pkt_num, server_dummy_pkt_num, start_padding_time, max_wnd, min_wnd)
     
     # MON_SITE_NUM = int(config.get('mon_site_num', 10))
     # MON_INST_NUM = int(config.get('mon_inst_num', 10))
@@ -260,6 +353,7 @@ if __name__ == '__main__':
     #parallel(flist)
     #logger.info("Time: {}".format(time.time()-start))
 
+######npz creation
     for site_id in range(site_ids):
         fpath = join(args.p, f"website_{site_id}_processed{args.format}")
         # original_traces = []
@@ -278,22 +372,23 @@ if __name__ == '__main__':
         if trace_count != 100:
             print(f"For site {site_id} only {trace_count}")
 
-        for trace_id in range(trace_count):
-            trace, _, _ = load_trace(fpath, trace_id)
-            padded = RP(trace)
+        # for trace_id in range(trace_count):
+        #     trace, _, _ = load_trace(fpath, trace_id)
+        #     padded = RP(trace)
 
-            # original_signed = convert_to_signed_trace(trace)
-            padded_signed = convert_to_signed_trace(padded)
+        #     # original_signed = convert_to_signed_trace(trace)
+        #     padded_signed = convert_to_signed_trace(padded)
 
-            # original_traces.append(original_signed)
-            padded_traces.append(padded_signed)
+        #     # original_traces.append(original_signed)
+        #     padded_traces.append(padded_signed)
             
         filepath = join(args.p, f"website_{site_id}_processed{args.format}")
         for trace_id in range(trace_count):
             flist.append((filepath, trace_id))
         
-        save_traces_npz_format(site_id, padded_traces, label="padded")
+        # save_traces_npz_format(site_id, padded_traces, label="front")
         # save_traces_npz_format(site_id, original_traces, label="original")
+######npz creation
 
     for i,f in enumerate(flist):
         logger.debug('Simulating {}'.format(f))
