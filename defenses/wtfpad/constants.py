@@ -1,10 +1,12 @@
 from os.path import join, abspath, dirname, pardir
 
 # Directories
-BASE_DIR = abspath(join(dirname(__file__), pardir))
+BASE_DIR = abspath(join(dirname(__file__)))
 RESULTS_DIR = join(BASE_DIR, "results")
 # Files
-CONFIG_FILE = join(BASE_DIR+'/wtfpad', 'config.ini')
+# CONFIG_FILE = join(BASE_DIR+'/wtfpad', 'config.ini')
+CONFIG_FILE = join(BASE_DIR, 'config.ini')
+
 # Logging format
 LOG_FORMAT = "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"
 

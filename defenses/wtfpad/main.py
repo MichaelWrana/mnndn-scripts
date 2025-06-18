@@ -12,17 +12,19 @@ from time import strftime
 import adaptive as ap
 import constants as ct
 import overheads as oh
-from pparser import Trace, parse, dump
+from pparser import Trace, Packet, parse, dump, trace_to_array, save_traces_npz_format
 
 import logging
+from tqdm import tqdm
 
 logger = logging.getLogger('wtfpad')
 #parameter
 
-MON_SITE_NUM = 50
+MON_SITE_NUM = 100
 MON_INST_NUM = 100
-UNMON_SITE_NUM = 5000
-OPEN_WORLD = 1
+UNMON_SITE_NUM = 0
+OPEN_WORLD = 0
+
 
 def init_directories(config):
     # Create a results dir if it doesn't exist yet
@@ -53,26 +55,43 @@ def main():
 
     # Run simulation on all traces
     latencies, bandwidths = [], []
-    for i in range(MON_SITE_NUM):
-        for j in range(MON_INST_NUM):
-            fname = str(i)+'-'+str(j)
+
+    for i in tqdm(range(MON_SITE_NUM), desc="Sites"):
+
+        npzfname = f"site_{i}_wtfpad_padded.npz"
+        traces_npz = []
+
+        # for j in range(MON_INST_NUM):
+        for j in tqdm(range(MON_INST_NUM), desc=f"Site {i}", leave=False):
+            fname = f"site_{i}_trace_{j}.txt"
+            outfname = f"site_{i}_trace_{j}.txt"
             if os.path.exists(join(args.traces_path,fname)):
                 trace = parse(join(args.traces_path, fname))
                 logger.info("Simulating trace: %s" % fname)
-                simulated = wtfpad.simulate(Trace(trace))
+                has_zero_at_start = len(trace) > 0 and trace[0].timestamp == 0.0 and trace[0].direction == 0
+                trace_without_zero = Trace(p for p in trace if not (p.timestamp == 0.0 and p.direction == 0))
+
+                simulated = wtfpad.simulate(trace_without_zero)
+
+                if has_zero_at_start:
+                    simulated.insert(0, Packet(0.0, 0))
                 # dump simulated trace to results directory
-                dump(simulated, join(output_dir, fname))
+                dump(simulated, join(output_dir, outfname))
+
+                traces_npz.append(trace_to_array(simulated))
 
                 # calculate overheads
-                bw_ovhd = oh.bandwidth_ovhd(simulated, trace)
-                bandwidths.append(bw_ovhd)
-                logger.debug("Bandwidth overhead: %s" % bw_ovhd)
+                # bw_ovhd = oh.bandwidth_ovhd(simulated, trace)
+                # bandwidths.append(bw_ovhd)
+                # logger.debug("Bandwidth overhead: %s" % bw_ovhd)
 
                 lat_ovhd = oh.latency_ovhd(simulated, trace)
                 latencies.append(lat_ovhd)
                 logger.debug("Latency overhead: %s" % lat_ovhd)
             else:
                 logger.warn('File %s does not exist!'%fname)
+
+        save_traces_npz_format(traces_npz, join(output_dir, npzfname), i)
 
     if OPEN_WORLD:
         for i in range(UNMON_SITE_NUM):
@@ -83,12 +102,12 @@ def main():
                 logger.info("Simulating trace: %s" % fname)
                 simulated = wtfpad.simulate(Trace(trace))
                 # dump simulated trace to results directory
-                dump(simulated, join(output_dir, fname))
+                dump(simulated, join(output_dir, outfname))
 
                 # calculate overheads
-                bw_ovhd = oh.bandwidth_ovhd(simulated, trace)
-                bandwidths.append(bw_ovhd)
-                logger.debug("Bandwidth overhead: %s" % bw_ovhd)
+                # bw_ovhd = oh.bandwidth_ovhd(simulated, trace)
+                # bandwidths.append(bw_ovhd)
+                # logger.debug("Bandwidth overhead: %s" % bw_ovhd)
 
                 lat_ovhd = oh.latency_ovhd(simulated, trace)
                 latencies.append(lat_ovhd)
@@ -139,7 +158,7 @@ def parse_arguments():
     config = conf_parser._sections[args.section]
 
     # Use default values if not specified
-    config = dict(config, **conf_parser._sections['normal_rcv'])
+    # config = dict(config, **conf_parser._sections['normal_rcv'])
 
     # logging config
     config_logger(args)

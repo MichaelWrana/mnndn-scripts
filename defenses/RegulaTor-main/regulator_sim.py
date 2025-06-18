@@ -5,6 +5,9 @@ import sys
 import numpy as np
 import argparse
 from defense_utils import *
+from tqdm import tqdm
+from collections import defaultdict
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('source_path', help='Undefended dataset')
@@ -184,7 +187,7 @@ def cost_calc_max_latency(orig_trace, alt_trace):
 
 def simulate(file_name):
     trace = get_trace(args.source_path + str(file_name), CUTOFF_TIME, CUTOFF_LENGTH)
-    website = int(file_name.split('-')[0])
+    website = int(file_name.split('_')[1])
     
     #get download and upload separately
     download_packets = get_download_packets(trace)
@@ -212,27 +215,40 @@ def simulate(file_name):
         for p in both_output:
             w.write(str(p[0]) + '\t' + str(p[1]) + '\n')
 
+    # if(SAVE_PICKLE):
+    #     #output .pkl files
+    #     direction_only = [np.float64(x[1]) for x in both_output]
+
+    #     #pad to 5000 (for deep fingerprinting attack)
+    #     if(len(direction_only) > 5000):
+    #         direction_only = direction_only[:5000]
+    #     else:
+    #         direction_only += [0]*(5000-len(direction_only))
+
+    #     return np.asarray(direction_only), np.int64(website)
+
     if(SAVE_PICKLE):
-        #output .pkl files
-        direction_only = [np.float64(x[1]) for x in both_output]
+        signed_trace = [np.float32(t * d) for t, d in both_output] #timestamp*direction
 
-        #pad to 5000 (for deep fingerprinting attack)
-        if(len(direction_only) > 5000):
-            direction_only = direction_only[:5000]
+        if len(signed_trace) > 5000:
+            padded_signed_trace = signed_trace[:5000]
         else:
-            direction_only += [0]*(5000-len(direction_only))
+            padded_signed_trace = signed_trace + [0.0] * (5000 - len(signed_trace))
 
-        return np.asarray(direction_only), np.int64(website)
+        return np.asarray(padded_signed_trace), np.int64(website), np.asarray(signed_trace)
+
 
 if __name__ == '__main__':   
     print(args)
-    file_list = [f for f in listdir(args.source_path) if isfile(join(args.source_path, f))]
+    file_list = sorted([f for f in listdir(args.source_path) if isfile(join(args.source_path, f))])
+    print(len(file_list))
     
     p = Pool(args.n_processes)
     
     if(SAVE_PICKLE):
         all_indiv_streams = []
-        all_indiv_streams = p.map(simulate, file_list)
+        # all_indiv_streams = p.map(simulate, file_list)
+        all_indiv_streams = list(tqdm(p.imap(simulate, file_list), total=len(file_list)))
         all_indiv_streams_real = []
         for x in all_indiv_streams:
             if x is not None:
@@ -241,8 +257,21 @@ if __name__ == '__main__':
 
         website_list = [x[1] for x in all_indiv_streams]
         trace_list = [x[0] for x in all_indiv_streams] 
+        unpadded_trace_list = [x[2] for x in all_indiv_streams] 
         
         output_pkl(trace_list, website_list, args.output_path) 
+
+        # Groups traces by website
+        traces_by_website = defaultdict(list)
+        for trace, website in zip(unpadded_trace_list, website_list):
+            traces_by_website[website].append(trace)
+
+        # Create one npz file per website 
+        for website, traces in traces_by_website.items():
+            out_dict = {website: traces}
+            out_path = os.path.join(args.output_path, f"website_{website}_processed.npz")  
+            with open(out_path, 'wb') as f:
+                pickle.dump(out_dict, f)
 
     else:
         p.map(simulate, file_list)

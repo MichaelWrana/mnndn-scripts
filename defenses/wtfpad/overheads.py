@@ -11,16 +11,16 @@ def latency(trace):
     return trace[-1].timestamp - trace[0].timestamp
 
 
-def bandwidth(trace):
-    total_bytes = sum([abs(p.length) for p in trace])
-    return 1.0 * total_bytes / latency(trace)
-    # return 1.0*total_bytes
+# def bandwidth(trace):
+#     total_bytes = sum([abs(p.length) for p in trace])
+#     return 1.0 * total_bytes / latency(trace)
+#     # return 1.0*total_bytes
 
-def bandwidth_ovhd(new, old):
-    bw_old = bandwidth(old)
-    if bw_old == 0.0:
-        return 0.0
-    return 1.0 * bandwidth(new) / bw_old
+# def bandwidth_ovhd(new, old):
+#     bw_old = bandwidth(old)
+#     if bw_old == 0.0:
+#         return 0.0
+#     return 1.0 * bandwidth(new) / bw_old
 
 
 def latency_ovhd(new, old):
@@ -37,13 +37,13 @@ def main():
         original_trace = parse(os.path.join(original_files, fname))
         simulated_trace = parse(os.path.join(simulated_files, fname))
 
-        bandwidth = bandwidth_ovhd(simulated_trace, original_trace)
+        # bandwidth = bandwidth_ovhd(simulated_trace, original_trace)
         latency = latency_ovhd(simulated_trace, original_trace)
 
-        bandwidths.append(bandwidth)
+        # bandwidths.append(bandwidth)
         latencies.append(latency)
 
-    print("Bandwidth overhead:", np.median([b for b in bandwidths if b > 0.0]))
+    # print("Bandwidth overhead:", np.median([b for b in bandwidths if b > 0.0]))
     print("Latency overhead:", np.median([l for l in latencies if l > 0.0]))
 
 

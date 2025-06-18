@@ -63,9 +63,9 @@ class AdaptiveSimulator(object):
             self.add_padding(i, trace, oppflow, 'rcv')
 
             # pad packet length
-            packet.length = self.length_distrib.random_sample()
+            # packet.length = self.length_distrib.random_sample()
 
-        # sort race by timestamp
+        # sort trace by timestamp
         trace.sort(key=lambda x: x.timestamp)
 
         return trace
@@ -154,8 +154,9 @@ class AdaptiveSimulator(object):
     def generate_dummy(self, packet, flow, timeout):
         """Set properties for dummy packet."""
         ts = packet.timestamp + timeout
-        l = self.length_distrib.random_sample()
-        return Packet(ts, flow.direction, l, dummy=True)
+        # l = self.length_distrib.random_sample()
+        # return Packet(ts, flow.direction, l, dummy=True)
+        return Packet(ts, flow.direction, dummy=True)
 
     def sum_noinf_toks(self, h):
         return sum([v for k, v in h.items() if k != INF])

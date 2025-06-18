@@ -7,6 +7,7 @@ import operator
 import random
 from random import randint
 from bisect import bisect_right
+from scipy.stats import genpareto
 
 import constants as ct
 

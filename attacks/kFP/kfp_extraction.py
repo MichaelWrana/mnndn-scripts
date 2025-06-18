@@ -429,6 +429,8 @@ def extract_features(trace_data, max_size=175, return_tags=False):
     )
     perc_in, perc_out = perc_inc_out(trace_data)
 
+    #conc - list of numbers of outgoing packets for each chunk, where a chunk consists of 20 packets
+    #altconc - list of 70 sums that represent number of outgoing packets for each chunk (chunks - 70  (lists) ± equal)
     altconc = []
     altconc = [sum(x) for x in chunkIt(conc, 70)]
     # print(conc)
@@ -497,6 +499,19 @@ def extract_features(trace_data, max_size=175, return_tags=False):
     ALL_FEATURES.append(sum(timestats))
     ALL_FEATURES.append(sum(number_pkts))
 
+    #tag and append conc, altconc, per_sec and alt_per_sec 
+    tags += ",".join([f"alt_per_sec_{i}" for i in range(len(alt_per_sec))]) + ","
+    ALL_FEATURES.extend(alt_per_sec)
+
+    tags += ",".join([f"altconc_{i}" for i in range(len(altconc))]) + ","
+    ALL_FEATURES.extend(altconc)
+
+    tags += ",".join([f"conc_{i}" for i in range(len(conc))]) + ","
+    ALL_FEATURES.extend(conc)
+
+    tags += ",".join([f"per_sec_{i}" for i in range(len(per_sec))]) + "," 
+    ALL_FEATURES.extend(per_sec)
+
     #print(f"PRINT1-FEATURES: {len(ALL_FEATURES)}")
     #print(f"PRINT1-TAGS: {len(tags.split(','))}")
 
@@ -525,26 +540,56 @@ def extract_features(trace_data, max_size=175, return_tags=False):
     #print(f"PRINT--FINAL--TAGS: {len(tags.split(','))}")
 
     # FROM TIME FEATURES
-    ALL_FEATURES.extend(altconc)
-    ALL_FEATURES.extend(alt_per_sec)
+    # ALL_FEATURES.extend(altconc)
+    # ALL_FEATURES.extend(alt_per_sec)
 
     # This is optional, since all other features are of equal size this gives the first n features
     # of this particular feature subset, some may be padded with 0's if too short.
-    ALL_FEATURES.extend(conc)
+    # ALL_FEATURES.extend(conc)
 
-    ALL_FEATURES.extend(per_sec)
+    # ALL_FEATURES.extend(per_sec)
 
 
     while len(ALL_FEATURES) < max_size:
         ALL_FEATURES.append(0)
     features = ALL_FEATURES[:max_size]
 
+    tags = tags.strip(",")
+
     if return_tags:
         return tags
 
     # features = ALL_FEATURES
-    return tuple(features) 
+    return tuple(features) #, conc, altconc
 
 
 if __name__ == "__main__":
     pass
+
+# if __name__ == "__main__":
+
+#     import pickle
+
+#     with open("/Users/anhelinabodak/Desktop/clean/new_dataset/website_80_processed.npz", "rb") as f:
+#         sample_trace = pickle.load(f)
+
+#     traces = []
+#     for i in range(100):
+#         trace = sample_trace[80][i]
+#         traces.append(trace)
+
+#     # selected_trace = traces[80]
+
+#     formatted = [(float(abs(p)), int(np.sign(p))) for p in traces[80]]
+
+#     features = extract_features(formatted)
+#     tags = extract_features(formatted, return_tags=True).split(',')
+
+#     # print (f'len conc {len(conc)}')
+#     # print (f'len altconc {len(altconc)}')
+
+#     print(f"\nExtracted {len(features)} features.")
+#     print(f"Extracted {len(tags)} tags.")
+
+#     for i, (name, val) in enumerate(zip(tags, features)):
+#         print(f"{i:<5} | {name:<25} = {val}")
