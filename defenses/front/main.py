@@ -171,7 +171,7 @@ def RP(trace):
     # else:
     #     server_dummy_pkt = server_dummy_pkt_num
 
-    #ensure more data packets than interest packets
+    #generate more data packets than interest packets
     server_dummy_pkt = np.random.randint(client_dummy_pkt,server_dummy_pkt_num)
 
     logger.debug("client_wnd:",client_wnd)
@@ -185,24 +185,30 @@ def RP(trace):
     first_incoming_pkt_time = trace[np.where(trace[:,1] <0)][0][0]
 
     last_pkt_time = trace[-1][0]    
+
+    if start_padding_time > last_pkt_time:
+        # print(f"Start of padding time ({start_padding_time}) exceeds last packet time ({last_pkt_time}). Returning original trace")
+        return trace
     
     client_timetable = getTimestamps(client_wnd, client_dummy_pkt)
+
     #this may cut off packets
     client_timetable = client_timetable[np.where(start_padding_time+client_timetable[:,0] <= last_pkt_time)]
 
 
     server_timetable = getTimestamps(server_wnd, server_dummy_pkt)
 
-    server_timetable[:,0] += first_incoming_pkt_time ##this was here, but do we need it?
+    # server_timetable[:,0] += first_incoming_pkt_time ##this was here, but do we need it?
 
 
-    #this may cut off data packets
+    #this was here but it may cut off data packets
     server_timetable = server_timetable[np.where(start_padding_time+server_timetable[:,0] <= last_pkt_time)]
 
     # if len(client_timetable) > len(server_timetable):
     #     print(f"Difference in timetables, interest: {len(client_timetable)}, data: {len(server_timetable)}")
 
       #to ensure that we have more data packets even if some get cut off  
+
     while len(server_timetable) <= len(client_timetable):
         extra_needed = len(client_timetable) - len(server_timetable) + 1
         extra_times = sorted(np.random.rayleigh(server_wnd, extra_needed))
@@ -217,18 +223,15 @@ def RP(trace):
     if len(client_timetable) > len(server_timetable):
         print(f"STILL PROBLEM Difference in timetables, interest: {len(client_timetable)}, data: {len(server_timetable)}")
 
-    
-    # first_server_pkt_time = server_timetable[0][0]
-    # first_client_pkt_time = client_timetable[0][0]
-
     first_server_pkt_time = np.min(server_timetable[:, 0])
     
     #if no interest packets, add one new at the beginning
     if client_timetable.size == 0:
         first_pkt_time = trace[0][0]
 
+        #avoid range errors if first dummy data packet is added before any original packets
         if first_pkt_time > first_server_pkt_time:
-            first_pkt_time = 0.0
+            first_pkt_time = 0.0 
 
         dummy_interest_time = np.random.uniform(first_pkt_time, first_server_pkt_time)
 
@@ -249,6 +252,13 @@ def RP(trace):
         client_timetable = np.vstack([client_timetable_row, client_timetable])
         # print(" new first client: ", client_timetable[0][0], "server: ", first_server_pkt_time) 
 
+
+    client_timetable[:, 0] += start_padding_time
+    server_timetable[:, 0] += start_padding_time
+
+
+
+    #was missing padding time 
     client_pkts = np.concatenate((client_timetable, 2*np.ones((len(client_timetable),1))),axis = 1)   #check
     server_pkts = np.concatenate((server_timetable, -2*np.ones((len(server_timetable),1))),axis = 1)
 

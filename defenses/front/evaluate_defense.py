@@ -48,7 +48,7 @@ def analyse_trace(trace):
     # + kfp
     return stats, more_interests_than_data
 
-def check_packets(site_ids, num_of_traces = 10000):
+def check_packets(site_ids, padded_dir, num_of_traces = 10000):
     general = []
     traces_with_more_data = []
     traces_with_more_interests_than_data = []
@@ -56,20 +56,9 @@ def check_packets(site_ids, num_of_traces = 10000):
     trace_ids =100
 
     for site_id in range(site_ids):
-        # if site_id == 30: trace_ids = 97
-        # elif site_id == 60: trace_ids = 96
-        # else: trace_ids = 100
         for trace_id in range(trace_ids):
-            # padded_file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/RegulaTor-main/perfect-regulator-dummies/site_{site_id}_trace:{trace_id}_original.txt"
-            # padded_file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/front/results/perfect-dataset-front-t1/site_{site_id}_trace:{trace_id}.txt"
-            # padded_file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/front/results/perfect-dataset-front-t2/site_{site_id}_trace:{trace_id}.txt"
-            # padded_file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/wtfpad/results/perfect-histos_rcv/site_{site_id}_trace:{trace_id}_padded_wtfpad.txt"
-            # padded_file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/tamaraw/results/all-with-dummy/site_{site_id}_trace_{trace_id}_original.txt"
-
-            # padded_file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/front/results/front_t1_new/site_{site_id}_trace_{trace_id}.txt"
     
-            padded_file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/front/results/front_t1_new_without_pad/site_{site_id}_trace_{trace_id}.txt"
-
+            padded_file = padded_dir + f"site_{site_id}_trace_{trace_id}.txt"
 
             padded_trace = load_trace(padded_file)
             stats_padded, more_interests_than_data = analyse_trace(padded_trace)
@@ -86,17 +75,7 @@ def check_packets(site_ids, num_of_traces = 10000):
     # output_file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/wtfpad/packet_count_all-histos-rcv.csv"
     # df.to_csv(output_file, index=False)
 
-    # output_file = "/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/RegulaTor-main/check_trace_stats_more-increased-time.txt"
-    # output_file = "/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/more_interests_then_data_front-t1.txt"
-    # output_file = "/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/more_interests_then_data_wtfpad-histos-rcv.txt"
-    # output_file = "/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/more_interests_then_data_regulator.txt"
-    # output_file = "/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/more_interests_then_data_tamaraw.txt"
-
-    # output_file = "/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/more_interests_then_data_front_t1_new.txt"
-
-
-    output_file = "/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/more_interests_then_data_front_t1_new_without_pad.txt"
-
+    output_file = padded_dir + "more_interests_then_data_front_t1_new_without_pad.txt"
 
     with open(output_file, 'w') as f:
         f.write(f"Percentage of traces with more interest packets than data: {percentage}% \n"\
@@ -139,7 +118,7 @@ def check_for_zero(site_ids=100, trace_ids=100):
     print(f'non_matching {non_matching}')
     print(f'total_checked {total_checked}')
 
-def check_how_trace_starts(site_ids=100, num_of_traces = 10000):
+def check_how_trace_starts(padded_dir, site_ids=100, num_of_traces = 10000):
     general = []
     not_general = []
     not_padded_files = []
@@ -151,26 +130,8 @@ def check_how_trace_starts(site_ids=100, num_of_traces = 10000):
     trace_ids = 100
 
     for site_id in range(site_ids):
-        # if site_id == 30: 
-        #     trace_ids = 97
-        # elif site_id == 60: 
-        #     trace_ids = 96
-        # else: 
-        #     trace_ids = 100
         for trace_id in range(trace_ids):
-            # file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/front/results/perfect-dataset-front-t1/site_{site_id}_trace:{trace_id}.txt"
-            # file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/front/results/perfect-dataset-front-t2/site_{site_id}_trace:{trace_id}.txt"
-            # file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/wtfpad/results/perfect-histos_rcv/site_{site_id}_trace:{trace_id}_padded_wtfpad.txt"
-            # file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/RegulaTor-main/results-final/site_{site_id}_trace:{trace_id}_original.txt"
-            # file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/wtfpad/results/perfect-histos_rcv/site_{site_id}_trace:{trace_id}_padded_wtfpad.txt"
-            # file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/RegulaTor-main/perfect-regulator-dummies/site_{site_id}_trace:{trace_id}_original.txt"
-            # file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/tamaraw/results/all-with-npz/site_{site_id}_trace_{trace_id}_original.txt"
-
-
-            # file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/front/results/front_t1_new/site_{site_id}_trace_{trace_id}.txt"
-
-            file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/front/results/front_t1_new_without_pad/site_{site_id}_trace_{trace_id}.txt"
-
+            file = padded_dir + f"site_{site_id}_trace_{trace_id}.txt"
 
             trace = load_trace(file)
             num_files +=1
@@ -203,20 +164,10 @@ def check_how_trace_starts(site_ids=100, num_of_traces = 10000):
     percentage_starts_with_data = starts_with_dummy_data / num_of_traces *100
     percentage_starts_with_interest = starts_with_dummy_interest / num_of_traces *100
     percentage_zero_dummies = traces_with_zero_dummies / num_of_traces *100
-    # output_file = "/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/front/check_how_trace_starts.txt"
-    # output_file = "/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/front/data_before_interest_t2.txt"
-    # output_file = "/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/data_before_interest_regulator-2.txt"
-    # output_file = "/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/data_before_interest_front-t1.txt"
-    # output_file = "/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/data_before_interest_front-t2.txt"
-    # output_file = "/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/data_before_interest_wtfpad-histos-rcv-2.txt"
-    # output_file = "/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/data_before_interest_tamaraw.txt"
 
-    # output_file = "/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/data_before_interest_t1_new.txt"
-    
-    output_file = "/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/data_before_interest_t1_new_without_pad.txt"
+    output_file = padded_dir + "data_before_interest_t1_new_without_pad.txt"
 
-
-    print(traces_with_zero_dummies, num_files)
+    # print(traces_with_zero_dummies, num_files)
     
     with open(output_file, 'w') as f:
         f.write(f"Number of traces where dummy data packet is before dummy interest: {starts_with_dummy_data}\n" \
@@ -753,57 +704,20 @@ def check_timeout():
 
 if __name__ == '__main__':
     
-
-    #delay gap regulator 3-1, 
-
     site_id = 0
     trace_id = 12
-    version = 'tamaraw_0604_1534'
 
     padded_file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/front/results/front_t1_new_without_pad/site_{site_id}_trace_{trace_id}.txt"
 
-    # original_file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/front/results/{version}/site_{site_id}_trace:{trace_id}_original.txt"
-    # padded_file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/front/results/{version}/site_{site_id}_trace:{trace_id}.txt"
-   
-   #1
     original_file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/RegulaTor-main/clean-perfect-dataset/site_{site_id}_trace_{trace_id}.txt"
-
-
-    #4 REGULATOR DUMMIES
-    # padded_file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/RegulaTor-main/not-full/perfect-regulator-dummies/site_{site_id}_trace:{trace_id}_original.txt"
-
-
-    # padded traces from wtfpad
-
-    # padded_file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/wtfpad/results/all-normal-rcv/site_{site_id}_trace:{trace_id}_padded_wtfpad.txt"
-    # padded_file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/wtfpad/results/all-histos-rcv/site_{site_id}_trace:{trace_id}_padded_wtfpad.txt"
-
-
-    #tamaraw
-    # padded_file = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/tamaraw/results/all-with-dummy/site_{site_id}_trace_{trace_id}_original.txt"
-
-
-
-
 
     site_ids = 100
 
-    check_packets(site_ids)
+    padded_dir = "/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/front/results/front_t1_new_without_pad/"
 
-    check_how_trace_starts()
+    check_packets(site_ids, padded_dir) #checks if traces have more dummy interests than dummy data 
 
-
-
-
-
-
-    # find_file_with_fewest_lines()
-
-    # original_dir = "/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/RegulaTor-main/traces-in-txt-4-websites"
-    # padded_dir = "/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/RegulaTor-main/small-withdummy-2"
-    # padded_dir = f"/Users/anhelinabodak/Desktop/mnndn/mnndn-scripts/defenses/wtfpad/results/all-normal-rcv"
-
-    
+    check_how_trace_starts(padded_dir) #checks if trace starts with dummy data
 
     # original_trace = load_trace(original_file)
 
@@ -822,4 +736,4 @@ if __name__ == '__main__':
     # plot_for_regulator(csv_file)
 
     # plot_trace(original_trace, f"Original Trace - Site {site_id}, Trace {trace_id}", site_id, trace_id, color='blue', start_index=0, end_index=None)
-    # plot_trace(padded_trace, f"Padded Trace - Site {site_id}, Trace {trace_id}", site_id, trace_id, color='red', start_index=0, end_index=None)
+    plot_trace(padded_trace, f"Padded Trace - Site {site_id}, Trace {trace_id}", site_id, trace_id, color='red', start_index=0, end_index=None)
