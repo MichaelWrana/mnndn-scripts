@@ -81,7 +81,7 @@ if __name__ == "__main__":
         pcap_filename = os.path.join(in_dir, str(sample_id), f'{website_name}.pcap')
 
         # Skip files smaller than 1MB
-        if not os.path.isfile(pcap_filename) or os.path.getsize(pcap_filename) < 1_048_576:
+        if not os.path.isfile(pcap_filename) or os.path.getsize(pcap_filename) < 600_000:
             continue
 
         fingerprint = convert_pcap_to_fingerprint(pcap_filename, user_addr, pad=False)

@@ -13,7 +13,7 @@ fi
 
 # Folder to monitor
 WATCH_DIR="/home/wrana_michael/experiment_data/output/"
-MIN_SIZE=1048576  # 1MB in bytes
+MIN_SIZE=600000  # 1MB in bytes
 
 # Handle Ctrl+C and forward to subprocess
 cleanup() {
