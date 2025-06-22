@@ -1,11 +1,14 @@
-from os.path import join, abspath, dirname, pardir
+from os.path import join, abspath #, dirname, pardir
+import os
 
 # Directories
-BASE_DIR = abspath(join(dirname(__file__), pardir))
+# BASE_DIR = abspath(join(dirname(__file__), pardir)) #parent directory
+BASE_DIR = abspath(os.getcwd())
 RESULTS_DIR = join(BASE_DIR, "results")
 
 # Files
-CONFIG_FILE = join(BASE_DIR+'/front', 'config.ini')
+# CONFIG_FILE = join(BASE_DIR+'/front', 'config.ini')
+CONFIG_FILE = join(BASE_DIR, 'config.ini')
 
 # Logging format
 LOG_FORMAT = "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"
